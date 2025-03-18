@@ -1,10 +1,11 @@
-package com.example.la_ruleta_de_la_suerte
+package com.example.la_ruleta_de_la_suerte.ui.main
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.la_ruleta_de_la_suerte.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
