@@ -56,7 +56,6 @@ class MainActivity : AppCompatActivity() {
                 anguloActual = (anguloActual + nuevoAngulo) % 360
             }
 
-
             override fun onAnimationRepeat(animation: Animation?) {}
         })
 
