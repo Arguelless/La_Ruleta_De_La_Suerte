@@ -7,12 +7,8 @@ import android.view.animation.RotateAnimation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.la_ruleta_de_la_suerte.R
-import java.util.Random
 
 // MainActivity.kt
 class MainActivity : AppCompatActivity() {
@@ -20,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ruletaImage: ImageView
     private lateinit var botonGirar: Button
     private var anguloActual = 0f
-    private val random = Random()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun girarRuleta() {
         // Ángulo aleatorio entre 360 y 3600 para que gire varias vueltas
-        val nuevoAngulo = random.nextInt(3600) + 360
+        val nuevoAngulo = (360..3960).random()
 
         val rotate = RotateAnimation(
             anguloActual,
