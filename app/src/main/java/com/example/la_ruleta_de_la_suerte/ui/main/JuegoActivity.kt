@@ -1,5 +1,6 @@
 package com.example.la_ruleta_de_la_suerte.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
@@ -7,20 +8,15 @@ import android.view.animation.RotateAnimation
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.la_ruleta_de_la_suerte.R
-import java.util.Random
 
-// MainActivity.kt
-class MainActivity : AppCompatActivity() {
+class JuegoActivity : AppCompatActivity() {
 
     private lateinit var ruletaImage: ImageView
     private lateinit var botonGirar: Button
     private var anguloActual = 0f
-    private val random = Random()
+    private lateinit var leaveButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,15 +24,19 @@ class MainActivity : AppCompatActivity() {
 
         ruletaImage = findViewById(R.id.ruletaImage)
         botonGirar = findViewById(R.id.botonGirar)
+        leaveButton = findViewById(R.id.leaveButton)
 
         botonGirar.setOnClickListener {
             girarRuleta()
+        }
+        leaveButton.setOnClickListener {
+            volverPrincipal()
         }
     }
 
     private fun girarRuleta() {
         // Ángulo aleatorio entre 360 y 3600 para que gire varias vueltas
-        val nuevoAngulo = random.nextInt(3600) + 360
+        val nuevoAngulo = (360..3960).random()
 
         val rotate = RotateAnimation(
             anguloActual,
@@ -71,5 +71,10 @@ class MainActivity : AppCompatActivity() {
         // Divide el ángulo en secciones (por ejemplo, 6 premios de 60°)
         val sector = (anguloFinal / 60)  // Cambia 60 si usas más o menos secciones
         Toast.makeText(this, "¡Has caído en el sector $sector!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun volverPrincipal() {
+        val intent = Intent(this, PrincipalActivity::class.java)
+        startActivity(intent)
     }
 }
