@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.la_ruleta_de_la_suerte.R
 
 // MainActivity.kt
-class MainActivity : AppCompatActivity() {
+class JuegoActivity : AppCompatActivity() {
 
     private lateinit var ruletaImage: ImageView
     private lateinit var botonGirar: Button
