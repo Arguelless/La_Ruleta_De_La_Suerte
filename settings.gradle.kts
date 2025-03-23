@@ -19,6 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
+
 rootProject.name = "La_Ruleta_De_La_Suerte"
 include(":app")
  
