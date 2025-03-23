@@ -1,5 +1,6 @@
 package com.example.la_ruleta_de_la_suerte.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
@@ -10,12 +11,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.la_ruleta_de_la_suerte.R
 
-// MainActivity.kt
 class JuegoActivity : AppCompatActivity() {
 
     private lateinit var ruletaImage: ImageView
     private lateinit var botonGirar: Button
     private var anguloActual = 0f
+    private lateinit var leaveButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +24,13 @@ class JuegoActivity : AppCompatActivity() {
 
         ruletaImage = findViewById(R.id.ruletaImage)
         botonGirar = findViewById(R.id.botonGirar)
+        leaveButton = findViewById(R.id.leaveButton)
 
         botonGirar.setOnClickListener {
             girarRuleta()
+        }
+        leaveButton.setOnClickListener {
+            volverPrincipal()
         }
     }
 
@@ -66,5 +71,10 @@ class JuegoActivity : AppCompatActivity() {
         // Divide el ángulo en secciones (por ejemplo, 6 premios de 60°)
         val sector = (anguloFinal / 60)  // Cambia 60 si usas más o menos secciones
         Toast.makeText(this, "¡Has caído en el sector $sector!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun volverPrincipal() {
+        val intent = Intent(this, PrincipalActivity::class.java)
+        startActivity(intent)
     }
 }

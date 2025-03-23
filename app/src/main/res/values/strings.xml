@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">La_Ruleta_De_La_Suerte</string>
     <string name="titulo">La ruleta de la suerte</string>
+    <string name="navigation_drawer_open">Abrir menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
+
 </resources>
