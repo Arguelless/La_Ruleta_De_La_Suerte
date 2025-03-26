@@ -11,12 +11,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.la_ruleta_de_la_suerte.App
+import com.example.la_ruleta_de_la_suerte.data.local.db.App
 import com.example.la_ruleta_de_la_suerte.R
+import com.example.la_ruleta_de_la_suerte.data.local.dao.JugadorDao
+import com.example.la_ruleta_de_la_suerte.data.local.dao.PartidaDao
+import com.example.la_ruleta_de_la_suerte.data.local.db.AppDatabase
 import com.example.la_ruleta_de_la_suerte.data.local.model.Jugador
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.disposables.DisposableContainer
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class JuegoActivity : AppCompatActivity() {
@@ -26,23 +28,29 @@ class JuegoActivity : AppCompatActivity() {
     private var anguloActual = 0f
     private lateinit var leaveButton: Button
     private lateinit var monedas: TextView
-    private val partidaDao = App.database.partidaDao()
-    private val jugadorDao = App.database.jugadorDao()
+    private lateinit var database: AppDatabase
+    private lateinit var jugadorDao: JugadorDao
+    private lateinit var partidaDao: PartidaDao
+    private lateinit var jugador: Jugador
     private val disposables = CompositeDisposable()
+    private var monedasDB: Int = 0
+
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.juego)
 
+        setContentView(R.layout.juego)
+        database = (applicationContext as App).database
+        jugadorDao = database.jugadorDao()
+        partidaDao = database.partidaDao()
         ruletaImage = findViewById(R.id.ruletaImage)
         botonGirar = findViewById(R.id.botonGirar)
         leaveButton = findViewById(R.id.leaveButton)
         monedas = findViewById(R.id.coinsText2)
 
         inicializarJugador()
-        cargarMonedas()
         botonGirar.setOnClickListener {
             girarRuleta()
         }
@@ -103,7 +111,7 @@ class JuegoActivity : AppCompatActivity() {
             }
             2 -> {
                 mensaje = "Quiebra"
-                actualizarMonedas(100)
+                quiebra()
             }
             3 -> {
                 mensaje = "+ 500"
@@ -129,62 +137,58 @@ class JuegoActivity : AppCompatActivity() {
     }
 
     private fun volverPrincipal() {
+        jugador.cantidadMonedas = monedasDB
+        val disposable = jugadorDao.actualizarJugador(jugador)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.d("JuegoActivity", "Jugador actualizado con éxito")
+            }, { error ->
+                // Maneja errores si los hay
+                Log.e("JuegoActivity", "Error al obtener jugador", error)
+            })
+        disposables.add(disposable)
         val intent = Intent(this, PrincipalActivity::class.java)
         startActivity(intent)
     }
 
     private fun inicializarJugador() {
-        jugadorDao.obtenerJugador()
-            .subscribeOn(Schedulers.io()) // Ejecutamos la obtención del jugador en un hilo en segundo plano
-            .observeOn(AndroidSchedulers.mainThread()) // Actualizamos la UI en el hilo principal
-            .subscribe({ jugador ->
-                // Si ya hay un jugador, no hacemos nada
-                if (jugador == null) {
-                    // Si no hay jugador, creamos uno con 100 monedas por defecto
-                    jugadorDao.insertar(Jugador(id = 1, cantidadMonedas = 100))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            Log.d("MainActivity", "Jugador creado con 100 monedas")
-                        }, { error ->
-                            Log.e("MainActivity", "Error al insertar jugador", error)
-                        }).let { disposables.add(it) } // Aseguramos que el Disposable se añade al CompositeDisposable
-                }
-            }, { error ->
-                Log.e("MainActivity", "Error al obtener jugador", error)
-            }).let { disposables.add(it) } // Aseguramos que el Disposable se añade al CompositeDisposable
-    }
-
-    private fun cargarMonedas() {
-        jugadorDao.obtenerJugador()
+        val disposable = jugadorDao.obtenerJugador()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ jugador ->
-                if (jugador != null) {
-                    monedas.text = "Monedas: ${jugador.cantidadMonedas}"
-                }
+            .subscribe({jugadorBD ->
+                jugador = jugadorBD
+                monedasDB = jugadorBD.cantidadMonedas
+                monedas.text = monedasDB.toString()
             }, { error ->
-                Log.e("MainActivity", "Error al obtener monedas", error)
-            }).let { disposables.add(it) } // Aseguramos que el Disposable se añade al CompositeDisposable
+                // Maneja errores si los hay
+
+                Log.e("JuegoActivity", "Error al obtener jugador", error)
+            })
+
+        disposables.add(disposable)
+
     }
 
-    fun actualizarMonedas(diferencia: Int) {
-        jugadorDao.obtenerJugador()
-            .subscribeOn(Schedulers.io())
-            .flatMapCompletable { jugador ->
-                val nuevasMonedas = jugador.cantidadMonedas + diferencia
-                jugadorDao.actualizarMonedas(nuevasMonedas) // Actualiza las monedas en la base de datos
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                cargarMonedas() // Actualizamos el TextView con el nuevo valor de monedas
-            }, { error ->
-                Log.e("MainActivity", "Error actualizando monedas", error)
-            }).let { disposables.add(it) } // Aseguramos que el Disposable se añade al CompositeDisposable
+    private fun actualizarMonedas(monedasASumar: Int) {
+
+        monedasDB += monedasASumar
+        monedas.text = monedasDB.toString()
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
-        disposables.clear() // Limpiamos todos los Disposables al destruir la actividad
+
+        disposables.clear() // Cancela todas las suscripciones
+
     }
+
+    private fun quiebra() {
+
+    }
+
+
+
+
 }
