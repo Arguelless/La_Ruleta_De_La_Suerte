@@ -8,5 +8,7 @@ import androidx.room.PrimaryKey
 data class Partida(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "fecha") val fecha: Long,
-    @ColumnInfo(name = "diferenciaMonedas") val diferenciaMonedas: Int
+    @ColumnInfo(name = "diferenciaMonedas") val diferenciaMonedas: Int,
+    @ColumnInfo(name = "totalMonedas") val totalMonedas: Int
+
 )

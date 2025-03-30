@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".ui.main.JuegoActivity" />
         <activity android:name=".ui.main.PrincipalActivity" />
+        <activity android:name=".ui.main.HistorialActivity" />
+        <activity android:name=".ui.main.AjustesActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

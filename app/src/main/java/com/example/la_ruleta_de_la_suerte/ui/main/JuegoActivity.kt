@@ -17,9 +17,11 @@ import com.example.la_ruleta_de_la_suerte.data.local.dao.JugadorDao
 import com.example.la_ruleta_de_la_suerte.data.local.dao.PartidaDao
 import com.example.la_ruleta_de_la_suerte.data.local.db.AppDatabase
 import com.example.la_ruleta_de_la_suerte.data.local.model.Jugador
+import com.example.la_ruleta_de_la_suerte.data.local.model.Partida
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.Date
 
 class JuegoActivity : AppCompatActivity() {
 
@@ -32,6 +34,7 @@ class JuegoActivity : AppCompatActivity() {
     private lateinit var jugadorDao: JugadorDao
     private lateinit var partidaDao: PartidaDao
     private lateinit var jugador: Jugador
+    private var monedasIniciales: Int = 0
     private val disposables = CompositeDisposable()
     private var monedasDB: Int = 0
 
@@ -49,8 +52,8 @@ class JuegoActivity : AppCompatActivity() {
         botonGirar = findViewById(R.id.botonGirar)
         leaveButton = findViewById(R.id.leaveButton)
         monedas = findViewById(R.id.coinsText2)
-
         inicializarJugador()
+
         botonGirar.setOnClickListener {
             girarRuleta()
         }
@@ -95,7 +98,6 @@ class JuegoActivity : AppCompatActivity() {
     private fun mostrarResultado(anguloFinal: Int) {
 
         val anguloAjustado = (360 - anguloFinal + 90) % 360  // 90° extra para mover el 0° a la derecha
-        Log.i("a",anguloFinal.toString())
         val sectorSize = 360f / 7
         val sector = (anguloAjustado / sectorSize).toInt()
         Log.i("zona", sector.toString())
@@ -103,23 +105,22 @@ class JuegoActivity : AppCompatActivity() {
         when(sector) {
             0 -> {
                 mensaje = "Otra vez"
-                actualizarMonedas(100)
             }
             1 -> {
                 mensaje = "x 2"
-                actualizarMonedas(100)
+                actualizarMonedas(monedasDB)
             }
             2 -> {
                 mensaje = "Quiebra"
-                quiebra()
+                actualizarMonedas(-monedasDB)
             }
             3 -> {
                 mensaje = "+ 500"
-                actualizarMonedas(100)
+                actualizarMonedas(500)
             }
             4 -> {
                 mensaje = "- 100"
-                actualizarMonedas(100)
+                actualizarMonedas(-100)
             }
             5 -> {
                 mensaje = "+ 100"
@@ -127,7 +128,7 @@ class JuegoActivity : AppCompatActivity() {
             }
             6 -> {
                 mensaje = "- 500"
-                actualizarMonedas(100)
+                actualizarMonedas(-500)
             }
 
         }
@@ -147,7 +148,19 @@ class JuegoActivity : AppCompatActivity() {
                 // Maneja errores si los hay
                 Log.e("JuegoActivity", "Error al obtener jugador", error)
             })
+        val partida = Partida(0,System.currentTimeMillis(), monedasDB - monedasIniciales, monedasDB)
+        val disposable2 = partidaDao.insertar(partida)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.d("JuegoActivity", "Partida insertada con éxito")
+            }, { error ->
+                // Maneja errores si los hay
+                Log.e("JuegoActivity", "Error al insertar partida", error)
+            })
+
         disposables.add(disposable)
+        disposables.add(disposable2)
         val intent = Intent(this, PrincipalActivity::class.java)
         startActivity(intent)
     }
@@ -159,6 +172,7 @@ class JuegoActivity : AppCompatActivity() {
             .subscribe({jugadorBD ->
                 jugador = jugadorBD
                 monedasDB = jugadorBD.cantidadMonedas
+                monedasIniciales = jugadorBD.cantidadMonedas
                 monedas.text = monedasDB.toString()
             }, { error ->
                 // Maneja errores si los hay
@@ -178,15 +192,26 @@ class JuegoActivity : AppCompatActivity() {
 
 
     override fun onDestroy() {
+        jugador.cantidadMonedas = monedasDB
+        val disposable = jugadorDao.actualizarJugador(jugador)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.d("JuegoActivity", "Jugador actualizado con éxito")
+            }, { error ->
+                // Maneja errores si los hay
+                Log.e("JuegoActivity", "Error al obtener jugador", error)
+            })
         super.onDestroy()
+
 
         disposables.clear() // Cancela todas las suscripciones
 
     }
 
-    private fun quiebra() {
 
-    }
+
+
 
 
 

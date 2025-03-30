@@ -11,4 +11,8 @@ interface PartidaDao {
 
     @Query("SELECT * FROM PARTIDA ORDER BY fecha DESC")
     fun obtenerTodas(): Single<List<Partida>>
+
+    @Query("DELETE FROM PARTIDA")
+    fun eliminarTodas(): Completable
+
 }
