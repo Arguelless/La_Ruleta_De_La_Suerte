@@ -69,7 +69,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.259" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/sonidoSwitch"
         android:layout_width="90dp"
         android:layout_height="40dp"
