@@ -19,6 +19,8 @@ import com.google.android.material.navigation.NavigationView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import androidx.core.view.size
+import androidx.core.view.get
 
 class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -29,7 +31,7 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private lateinit var database: AppDatabase
     private lateinit var jugadorDao: JugadorDao
     private val disposables = CompositeDisposable()
-
+    private lateinit var navigationView: NavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.principal)
@@ -39,21 +41,11 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         toolbar = findViewById(R.id.toolbar)            // Aquí asignamos la Toolbar
         playButton = findViewById(R.id.playButton)
         coinsText = findViewById(R.id.coinsText)
-        val navigationView: NavigationView = findViewById(R.id.navigation_view)
+        navigationView = findViewById(R.id.navigation_view)
         navigationView.setNavigationItemSelectedListener(this)
 
         setSupportActionBar(toolbar)  // Esto habilita la Toolbar como ActionBar
-        val disp = jugadorDao.obtenerJugador()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({jugadorBD ->
-                coinsText.text = jugadorBD.cantidadMonedas.toString()
-            }, { error ->
-                // Maneja errores si los hay
-
-                Log.e("JuegoActivity", "Error al obtener jugador", error)
-            })
-        disposables.add(disp)
+        setearTextMonedas()
         // Ahora configuramos el ActionBarDrawerToggle para que se muestre el icono de hamburguesa
         toggle = ActionBarDrawerToggle(
             this,
@@ -94,6 +86,7 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
         // Cerrar el Navigation Drawer después de seleccionar
         drawerLayout.closeDrawer(GravityCompat.START)
+        item.isChecked = false
         return true
     }
 
@@ -101,5 +94,38 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         super.onDestroy()
         disposables.clear()
     }
+
+    override fun onResume() {
+        super.onResume()
+        setearTextMonedas()
+        navigationView.setCheckedItem(0)
+        for (i in 0 until navigationView.menu.size) {
+            navigationView.menu[i].isChecked = false
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setearTextMonedas()
+        navigationView.setCheckedItem(0)
+        for (i in 0 until navigationView.menu.size) {
+            navigationView.menu[i].isChecked = false
+        }
+    }
+
+    private fun setearTextMonedas() {
+        val disp = jugadorDao.obtenerJugador()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({jugadorBD ->
+                coinsText.text = jugadorBD.cantidadMonedas.toString()
+            }, { error ->
+                // Maneja errores si los hay
+
+                Log.e("JuegoActivity", "Error al obtener jugador", error)
+            })
+        disposables.add(disp)
+    }
+
 
 }

@@ -21,5 +21,6 @@ interface JugadorDao {
     @Query("SELECT * FROM JUGADOR LIMIT 1")
     fun obtenerJugador(): Single<Jugador>
 
-
+    @Query("UPDATE JUGADOR SET cantidadMonedas = :monedas WHERE id = 1")
+    fun actualizarMonedas(monedas: Int): Completable
 }

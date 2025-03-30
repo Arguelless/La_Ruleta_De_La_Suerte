@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,8 +44,7 @@ class HistorialActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         backButton.setOnClickListener {
-            val intent = Intent(this, PrincipalActivity::class.java)
-            startActivity(intent)
+            onBackPressedDispatcher.onBackPressed()
         }
 
         reset.setOnClickListener {
@@ -55,6 +55,8 @@ class HistorialActivity : AppCompatActivity() {
                     Log.d("HistorialActivity", "Historial borrado con éxito")
                     partidas = listOf()
                     recyclerView.adapter = HistorialAdapter(partidas)
+                    Toast.makeText(this, "Historial reseteado", Toast.LENGTH_SHORT).show()
+
                 }, { error ->
                     // Maneja errores si los hay
                     Log.e("HistorialActivity", "Error al borrar historial", error)
