@@ -24,5 +24,4 @@
         android:layout_below="@id/ruletaImage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"/>
-
 </RelativeLayout>

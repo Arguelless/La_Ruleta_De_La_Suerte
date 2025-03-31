@@ -22,7 +22,7 @@ class BienvenidaActivity : AppCompatActivity() {
     }
 
     private fun entrar() {
-        val intent = Intent(this, JuegoActivity::class.java)
+        val intent = Intent(this, PrincipalActivity::class.java)
         startActivity(intent)
     }
 }
