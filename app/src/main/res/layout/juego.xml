@@ -40,15 +40,15 @@
 
     <ImageView
         android:id="@+id/ruletaImage"
-        android:layout_width="334dp"
-        android:layout_height="335dp"
-        android:src="@drawable/ruletaplay"
+        android:layout_width="304dp"
+        android:layout_height="316dp"
+        android:src="@drawable/ruleta_play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.336" />
+        app:layout_constraintVertical_bias="0.365" />
 
     <Button
         android:id="@+id/botonGirar"
