@@ -99,6 +99,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/gold"
+        app:itemTextColor="@color/black"
         app:menu="@menu/menu_lateral" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
