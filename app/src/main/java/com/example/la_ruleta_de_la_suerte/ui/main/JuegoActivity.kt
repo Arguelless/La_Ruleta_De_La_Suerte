@@ -102,6 +102,7 @@ class JuegoActivity : AppCompatActivity() {
         val sector = (anguloAjustado / sectorSize).toInt()
         Log.i("zona", sector.toString())
         var mensaje = ""
+        var iconoNotificacion = R.drawable.ic_victory
         when(sector) {
             0 -> {
                 mensaje = "Otra vez"
@@ -109,26 +110,32 @@ class JuegoActivity : AppCompatActivity() {
             1 -> {
                 mensaje = "x 2"
                 actualizarMonedas(monedasDB)
+                iconoNotificacion = R.drawable.ic_victory
             }
             2 -> {
                 mensaje = "Quiebra"
                 actualizarMonedas(-monedasDB)
+                iconoNotificacion = R.drawable.ic_lose
             }
             3 -> {
                 mensaje = "+ 500"
                 actualizarMonedas(500)
+                iconoNotificacion = R.drawable.ic_victory
             }
             4 -> {
                 mensaje = "- 100"
                 actualizarMonedas(-100)
+                iconoNotificacion = R.drawable.ic_lose
             }
             5 -> {
                 mensaje = "+ 100"
                 actualizarMonedas(100)
+                iconoNotificacion = R.drawable.ic_victory
             }
             6 -> {
                 mensaje = "- 500"
                 actualizarMonedas(-500)
+                iconoNotificacion = R.drawable.ic_lose
             }
 
         }
