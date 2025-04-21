@@ -2,18 +2,89 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity">
+    tools:context=".ui.main.ajustesActivity"
+    android:padding="16dp">
 
+    <!-- Volumen de efectos -->
     <TextView
+        android:id="@+id/textEffectsVolume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Volumen de Efectos"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/seekBarEffects"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="100"
+        app:layout_constraintTop_toBottomOf="@id/textEffectsVolume"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btnMuteEffects"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <ImageButton
+        android:id="@+id/btnMuteEffects"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_lock_silent_mode"
+        android:contentDescription="Silenciar efectos"
+        app:layout_constraintTop_toTopOf="@id/seekBarEffects"
+        app:layout_constraintBottom_toBottomOf="@id/seekBarEffects"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Volumen de música -->
+    <TextView
+        android:id="@+id/textMusicVolume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Volumen de Música"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/seekBarEffects"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <SeekBar
+        android:id="@+id/seekBarMusic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="100"
+        app:layout_constraintTop_toBottomOf="@id/textMusicVolume"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnMuteMusic"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <ImageButton
+        android:id="@+id/btnMuteMusic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_lock_silent_mode"
+        android:contentDescription="Silenciar música"
+        app:layout_constraintTop_toTopOf="@id/seekBarMusic"
+        app:layout_constraintBottom_toBottomOf="@id/seekBarMusic"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Selección de canción -->
+    <TextView
+        android:id="@+id/textSelectSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Canción de Fondo"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/seekBarMusic"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <Button
+        android:id="@+id/btnSelectSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Elegir Canción"
+        app:layout_constraintTop_toBottomOf="@id/textSelectSong"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

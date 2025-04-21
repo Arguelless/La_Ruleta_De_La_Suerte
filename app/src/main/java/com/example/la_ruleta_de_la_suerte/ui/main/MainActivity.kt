@@ -1,10 +1,12 @@
 package com.example.la_ruleta_de_la_suerte.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -31,6 +33,12 @@ class MainActivity : AppCompatActivity() {
 
         botonGirar.setOnClickListener {
             girarRuleta()
+        }
+        val btnAjustes: ImageButton = findViewById(R.id.btnAjustes)
+        btnAjustes.setOnClickListener {
+            val intent = Intent(this, ajustesActivity::class.java)
+            startActivity(intent)
+
         }
     }
 
@@ -72,4 +80,5 @@ class MainActivity : AppCompatActivity() {
         val sector = (anguloFinal / 60)  // Cambia 60 si usas más o menos secciones
         Toast.makeText(this, "¡Has caído en el sector $sector!", Toast.LENGTH_SHORT).show()
     }
+
 }
