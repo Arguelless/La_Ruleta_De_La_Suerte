@@ -32,6 +32,7 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private lateinit var jugadorDao: JugadorDao
     private val disposables = CompositeDisposable()
     private lateinit var navigationView: NavigationView
+    private lateinit var helpButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.principal)
@@ -42,6 +43,7 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         playButton = findViewById(R.id.playButton)
         coinsText = findViewById(R.id.coinsText)
         navigationView = findViewById(R.id.navigation_view)
+        helpButton = findViewById(R.id.btnHelp)
         navigationView.setNavigationItemSelectedListener(this)
 
         setSupportActionBar(toolbar)  // Esto habilita la Toolbar como ActionBar
@@ -60,6 +62,10 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
         playButton.setOnClickListener {
             jugar()
+        }
+        helpButton.setOnClickListener {
+            val intent = Intent(this, HelpActivity::class.java)
+            startActivity(intent)
         }
     }
 
