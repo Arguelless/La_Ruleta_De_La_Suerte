@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+<uses-permission android:name="android.permission.WRITE_CALENDAR" />
+<uses-permission android:name="android.permission.READ_CALENDAR" />
+
+
     <application
         android:name=".data.local.db.App"
         android:allowBackup="true"
@@ -27,6 +33,7 @@
         <activity android:name=".ui.main.PrincipalActivity" />
         <activity android:name=".ui.main.HistorialActivity" />
         <activity android:name=".ui.main.AjustesActivity" />
+        <activity android:name=".ui.main.HelpActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
