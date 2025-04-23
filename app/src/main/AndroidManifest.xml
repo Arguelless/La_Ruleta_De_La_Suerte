@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
+        android:name=".data.local.db.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,7 +15,7 @@
         android:theme="@style/Theme.La_Ruleta_De_La_Suerte"
         tools:targetApi="31">
         <activity
-            android:name=".PrincipalActivity"
+            android:name=".ui.main.BienvenidaActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.ajustesActivity" />
-        <activity android:name=".ui.main.MainActivity" />
-        <service android:name=".ui.main.services.MusicService" />
+        <activity android:name=".ui.main.JuegoActivity" />
+        <activity android:name=".ui.main.PrincipalActivity" />
+        <activity android:name=".ui.main.HistorialActivity" />
+        <activity android:name=".ui.main.AjustesActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
