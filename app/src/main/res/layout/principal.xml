@@ -34,16 +34,18 @@
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:layout_constraintVertical_bias="0.204"
+            app:layout_constraintVertical_bias="0.365"
             app:srcCompat="@drawable/ruleta" />
 
         <Button
             android:id="@+id/playButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="105dp"
+            android:layout_height="56dp"
             android:backgroundTint="@color/gold"
+            android:fontFamily="@font/roboto_bold"
             android:text="Jugar"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,9 +56,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="@+id/toolbar"
-            app:layout_constraintHorizontal_bias="0.863"
+            app:layout_constraintHorizontal_bias="0.908"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.622" />
@@ -70,8 +73,20 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/coinsText"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.638"
+            app:layout_constraintVertical_bias="0.636"
             app:srcCompat="@drawable/dollar" />
+
+        <TextView
+            android:id="@+id/tituloPrincipal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="La ruleta de la suerte"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <!-- Tu texto original -->
 
@@ -84,7 +99,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/gold"
-        app:headerLayout="@layout/nav_header"
+        app:itemTextColor="@color/black"
         app:menu="@menu/menu_lateral" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

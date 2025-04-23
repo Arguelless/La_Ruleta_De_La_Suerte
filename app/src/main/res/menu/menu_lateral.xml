@@ -4,19 +4,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_inicio"
-            android:icon="@android:drawable/ic_menu_view"
+            android:icon="@drawable/home"
             android:title="Inicio" />
         <item
-            android:id="@+id/nav_perfil"
-            android:icon="@android:drawable/ic_menu_myplaces"
-            android:title="Perfil" />
+            android:id="@+id/nav_historial"
+            android:icon="@drawable/time"
+            android:title="Historial" />
         <item
             android:id="@+id/nav_ajustes"
-            android:icon="@android:drawable/ic_menu_preferences"
+            android:icon="@drawable/wrench"
             android:title="Ajustes" />
-        <item
-            android:id="@+id/nav_cerrar_sesion"
-            android:icon="@android:drawable/ic_lock_power_off"
-            android:title="Cerrar sesión" />
     </group>
 </menu>
