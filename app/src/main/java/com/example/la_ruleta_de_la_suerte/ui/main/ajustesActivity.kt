@@ -1,24 +1,40 @@
 package com.example.la_ruleta_de_la_suerte.ui.main
 
+import android.app.NotificationManager
 import android.content.Intent
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.example.la_ruleta_de_la_suerte.R
 import com.example.la_ruleta_de_la_suerte.ui.main.services.MusicService
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import com.example.la_ruleta_de_la_suerte.data.local.db.App
 
-class ajustesActivity : AppCompatActivity() {
+class AjustesActivity : AppCompatActivity() {
 
-    private lateinit var effectsSeekBar: SeekBar
-    private lateinit var musicSeekBar: SeekBar
-    private lateinit var muteEffectsBtn: ImageButton
-    private lateinit var muteMusicBtn: ImageButton
-    private lateinit var selectSongBtn: Button
+    private lateinit var sonidoSwitch: SwitchCompat
+    private lateinit var musicaSwitch: SwitchCompat
+    private lateinit var cambiarCancionBtn: Button
+    private lateinit var audioSwitch: SwitchCompat
+    private lateinit var resetMonedas: Button
+    private lateinit var backButton: ImageButton
+    private lateinit var audioManager: AudioManager
+    private lateinit var notificationManager: NotificationManager
 
-    private var isMusicMuted = false
-    private var isEffectsMuted = false
+    private val disposables = CompositeDisposable()
+
+    private var isMusicOn = true
+    private var isSoundOn = true
+
+    private val jugadorDao by lazy { (applicationContext as App).database.jugadorDao() }
 
     private val selectAudioLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -36,48 +52,92 @@ class ajustesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ajustes)
 
-        effectsSeekBar = findViewById(R.id.seekBarEffects)
-        musicSeekBar = findViewById(R.id.seekBarMusic)
-        muteEffectsBtn = findViewById(R.id.btnMuteEffects)
-        muteMusicBtn = findViewById(R.id.btnMuteMusic)
-        selectSongBtn = findViewById(R.id.btnSelectSong)
+        // Inicializar componentes
+        sonidoSwitch = findViewById(R.id.sonidoSwitch2)
+        musicaSwitch = findViewById(R.id.musicaSwitch)
+        cambiarCancionBtn = findViewById(R.id.selecMusica)
+        audioSwitch = findViewById(R.id.sonidoSwitch)
+        resetMonedas = findViewById(R.id.resetMonedas)
+        backButton = findViewById(R.id.back_button4)
 
-        // Volúmenes iniciales
-        effectsSeekBar.progress = 80
-        musicSeekBar.progress = 70
+        audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        effectsSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
-                // Lógica de efectos (si usas SoundPool)
+        // Preferencias
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+
+        // Cargar preferencia de música y aplicar estado
+        isMusicOn = prefs.getBoolean("musica", true)
+        musicaSwitch.isChecked = isMusicOn
+
+        // Estado inicial del switch de audio basado en el modo del dispositivo
+        audioSwitch.isChecked = audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL
+
+        audioSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (notificationManager.isNotificationPolicyAccessGranted) {
+                audioManager.ringerMode = if (isChecked) {
+                    AudioManager.RINGER_MODE_NORMAL
+                } else {
+                    AudioManager.RINGER_MODE_SILENT
+                }
+            } else {
+                startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
             }
-
-            override fun onStartTrackingTouch(sb: SeekBar?) {}
-            override fun onStopTrackingTouch(sb: SeekBar?) {}
-        })
-
-        musicSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
-                // Aquí puedes añadir comunicación con el servicio para cambiar volumen si lo implementas
-                // Pero por ahora lo dejamos fijo o lo manejas dentro del servicio
-            }
-
-            override fun onStartTrackingTouch(sb: SeekBar?) {}
-            override fun onStopTrackingTouch(sb: SeekBar?) {}
-        })
-
-        muteEffectsBtn.setOnClickListener {
-            isEffectsMuted = !isEffectsMuted
-            Toast.makeText(this, if (isEffectsMuted) "Efectos silenciados" else "Efectos activados", Toast.LENGTH_SHORT).show()
         }
 
-        muteMusicBtn.setOnClickListener {
-            isMusicMuted = !isMusicMuted
-            // Solo mostramos mensaje por ahora. Puedes enviar un Intent para pausar/reanudar en el servicio
-            Toast.makeText(this, if (isMusicMuted) "Música silenciada" else "Música activada", Toast.LENGTH_SHORT).show()
+        sonidoSwitch.setOnCheckedChangeListener { _, isChecked ->
+            isSoundOn = isChecked
+            Toast.makeText(
+                this,
+                if (isChecked) "Efectos activados" else "Efectos desactivados",
+                Toast.LENGTH_SHORT
+            ).show()
+            // Aquí podrías agregar lógica para activar/desactivar efectos
         }
 
-        selectSongBtn.setOnClickListener {
+        musicaSwitch.setOnCheckedChangeListener { _, isChecked ->
+            isMusicOn = isChecked
+            prefs.edit().putBoolean("musica", isChecked).apply()
+
+            val intent = Intent(this, MusicService::class.java)
+            if (isChecked) {
+                startService(intent)
+                Toast.makeText(this, "Música activada", Toast.LENGTH_SHORT).show()
+            } else {
+                stopService(intent)
+                Toast.makeText(this, "Música desactivada", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        cambiarCancionBtn.setOnClickListener {
             selectAudioLauncher.launch("audio/*")
         }
+
+        resetMonedas.setOnClickListener {
+            val disp = jugadorDao.actualizarMonedas(1000)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    Log.d("AjustesActivity", "Monedas reseteadas")
+                    Toast.makeText(this, "Monedas reseteadas", Toast.LENGTH_SHORT).show()
+                }, { error ->
+                    Log.e("AjustesActivity", "Error al resetear monedas", error)
+                })
+            disposables.add(disp)
+        }
+
+        backButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        // Si no tiene permisos para cambiar el modo de notificaciones, redirige
+        if (!notificationManager.isNotificationPolicyAccessGranted) {
+            startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 }

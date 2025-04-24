@@ -6,13 +6,16 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 
 import android.os.Environment
 import android.provider.CalendarContract
+import android.provider.MediaStore
 import android.text.format.DateUtils
 import android.util.Log
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.RotateAnimation
@@ -27,7 +30,6 @@ import com.example.la_ruleta_de_la_suerte.R
 import java.io.IOException
 import java.util.*
 import com.example.la_ruleta_de_la_suerte.data.local.db.App
-import com.example.la_ruleta_de_la_suerte.R
 import com.example.la_ruleta_de_la_suerte.data.local.dao.JugadorDao
 import com.example.la_ruleta_de_la_suerte.data.local.dao.PartidaDao
 import com.example.la_ruleta_de_la_suerte.data.local.db.AppDatabase
@@ -129,8 +131,8 @@ class JuegoActivity : AppCompatActivity() {
 
     // Función para mostrar el resultado de la ruleta
     private fun mostrarResultado(anguloFinal: Int) {
-        val sector = (anguloFinal / 60)
-        Toast.makeText(this, "¡Has caído en el sector $sector!", Toast.LENGTH_SHORT).show()
+    val sector1 = (anguloFinal/60)
+        Toast.makeText(this, "¡Has caído en el sector $sector1!", Toast.LENGTH_SHORT).show()
 
         val anguloAjustado = (360 - anguloFinal + 90) % 360  // 90° extra para mover el 0° a la derecha
         val sectorSize = 360f / 7
@@ -254,7 +256,7 @@ class JuegoActivity : AppCompatActivity() {
     // Función para guardar la captura de pantalla
     private fun saveVictoryScreenshot(screenshot: Bitmap, context: JuegoActivity) {
         val contentResolver = context.contentResolver
-        val imageCollection: String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val imageCollection: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
         } else {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -270,7 +272,7 @@ class JuegoActivity : AppCompatActivity() {
 
         if (imageUri != null) {
             try {
-                contentResolver.openOutputStream(imageUri).use { outputStream ->
+                contentResolver.openOutputStream(imageUri)?.use { outputStream ->
                     screenshot.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                 }
 

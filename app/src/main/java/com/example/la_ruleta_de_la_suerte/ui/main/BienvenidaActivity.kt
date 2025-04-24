@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.la_ruleta_de_la_suerte.R
+import com.example.la_ruleta_de_la_suerte.ui.main.services.MusicService
 
 class BienvenidaActivity : AppCompatActivity() {
 
@@ -13,7 +14,8 @@ class BienvenidaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.bienvenida)
-
+        val intent = Intent(this, MusicService::class.java)
+        startService(intent)
         botonEntrar = findViewById(R.id.entrar)
 
         botonEntrar.setOnClickListener {
