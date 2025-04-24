@@ -30,7 +30,7 @@ class MusicService : Service() {
                 start()
             }
         } else if (mediaPlayer == null) {
-            val defaultSongUri = Uri.parse("android.resource://${packageName}/${R.raw.smch_droid}")
+            val defaultSongUri = Uri.parse("android.resource://${packageName}/${R.raw.smchdroid}")
             mediaPlayer = MediaPlayer.create(this, currentSongUri ?: defaultSongUri)
             mediaPlayer?.isLooping = true
             mediaPlayer?.start()

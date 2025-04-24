@@ -30,7 +30,7 @@ fun saveVictoryScreenshot(bitmap: Bitmap, context: Context) {
 
     uri?.let {
         context.contentResolver.openOutputStream(it).use { output ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, output!!)
         }
         contentValues.clear()
         contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)

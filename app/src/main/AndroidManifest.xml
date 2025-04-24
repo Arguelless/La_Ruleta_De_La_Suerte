@@ -34,6 +34,8 @@
         <activity android:name=".ui.main.HistorialActivity" />
         <activity android:name=".ui.main.AjustesActivity" />
         <activity android:name=".ui.main.HelpActivity" />
+        <service android:name=".ui.main.services.MusicService"/>
+        <service android:name=".ui.main.services.SonidoService"/>
 
         <meta-data
             android:name="preloaded_fonts"
