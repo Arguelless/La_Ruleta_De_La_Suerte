@@ -9,12 +9,12 @@ import android.graphics.Canvas
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-
 import android.os.Environment
 import android.provider.CalendarContract
 import android.provider.MediaStore
 import android.text.format.DateUtils
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
@@ -27,18 +27,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.la_ruleta_de_la_suerte.R
-import java.io.IOException
-import java.util.*
-import com.example.la_ruleta_de_la_suerte.data.local.db.App
 import com.example.la_ruleta_de_la_suerte.data.local.dao.JugadorDao
 import com.example.la_ruleta_de_la_suerte.data.local.dao.PartidaDao
+import com.example.la_ruleta_de_la_suerte.data.local.db.App
 import com.example.la_ruleta_de_la_suerte.data.local.db.AppDatabase
 import com.example.la_ruleta_de_la_suerte.data.local.model.Jugador
 import com.example.la_ruleta_de_la_suerte.data.local.model.Partida
+import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.Date
+import java.io.IOException
+import java.util.Calendar
+import java.util.TimeZone
 
 class JuegoActivity : AppCompatActivity() {
 
@@ -132,12 +133,10 @@ class JuegoActivity : AppCompatActivity() {
     // Función para mostrar el resultado de la ruleta
     private fun mostrarResultado(anguloFinal: Int) {
     val sector1 = (anguloFinal/60)
-        Toast.makeText(this, "¡Has caído en el sector $sector1!", Toast.LENGTH_SHORT).show()
 
         val anguloAjustado = (360 - anguloFinal + 90) % 360  // 90° extra para mover el 0° a la derecha
         val sectorSize = 360f / 7
         val sector = (anguloAjustado / sectorSize).toInt()
-        Log.i("zona", sector.toString())
         var mensaje = ""
         var iconoNotificacion = R.drawable.ic_victory
         when(sector) {
@@ -176,9 +175,20 @@ class JuegoActivity : AppCompatActivity() {
             }
 
         }
+        val inflater: LayoutInflater = getLayoutInflater()
+        val layout: View? = inflater.inflate(R.layout.toast_con_icono, null)
 
+        val text = layout!!.findViewById<TextView?>(R.id.toast_text)
+        text.text = mensaje
 
-        Toast.makeText(this, "¡Has caído en el sector $mensaje!", Toast.LENGTH_SHORT).show()
+        val icon = layout.findViewById<ImageView?>(R.id.toast_icon)
+        icon.setImageResource(iconoNotificacion)
+        val toast = Toast(applicationContext)
+        toast.setDuration(Toast.LENGTH_SHORT)
+        toast.setView(layout)
+        toast.show()
+
+        //Toast.makeText(this, "¡Has caído en el sector $mensaje!", Toast.LENGTH_SHORT).show()
     }
 
     // Función para volver a la actividad principal
