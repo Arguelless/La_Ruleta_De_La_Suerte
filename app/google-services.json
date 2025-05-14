@@ -12,7 +12,12 @@
           "package_name": "com.example.la_ruleta_de_la_suerte"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "627895778992-tche2gtr1i1bf005jkjervu60bt2ac0l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD9BdJMOeJQZSy2lDmYKqqpQ9o1wLNFgRE"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627895778992-tche2gtr1i1bf005jkjervu60bt2ac0l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
