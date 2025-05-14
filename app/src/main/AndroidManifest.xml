@@ -36,6 +36,7 @@
         <activity android:name=".ui.main.HistorialActivity" />
         <activity android:name=".ui.main.AjustesActivity" />
         <activity android:name=".ui.main.HelpActivity" />
+        <activity android:name=".ui.main.TopGlobalActivity" />
         <service android:name=".ui.main.services.MusicService"/>
         <service android:name=".ui.main.services.SonidoService"/>
 

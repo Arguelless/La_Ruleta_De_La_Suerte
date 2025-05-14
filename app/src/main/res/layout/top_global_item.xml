@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- Indicador de color -->
+
+    <TextView
+        android:id="@+id/nombre_usuario"
+        android:layout_width="127dp"
+        android:layout_height="38dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingEnd="8dp"
+        android:text="Marc"
+        android:textAlignment="textEnd"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_resultado"
+        android:layout_width="114dp"
+        android:layout_height="38dp"
+        android:gravity="center_vertical"
+        android:text="+1240 Coins"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_fecha"
+        android:layout_width="149dp"
+        android:layout_height="37dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:text="12/05/2024 - 16:30"
+        android:textAlignment="center"
+        android:textSize="16sp" />
+</LinearLayout>
