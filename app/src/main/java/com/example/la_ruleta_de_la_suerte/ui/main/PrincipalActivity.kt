@@ -26,10 +26,9 @@ import com.google.android.gms.location.LocationServices
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import androidx.core.view.size
-import androidx.core.view.get
 
 class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toolbar: Toolbar
     private lateinit var toggle: ActionBarDrawerToggle
@@ -40,29 +39,25 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private val disposables = CompositeDisposable()
     private lateinit var navigationView: NavigationView
     private lateinit var helpButton: Button
-    private lateinit var fusedLocationClient: FusedLocationProviderClient  // Para obtener la ubicación
-    private lateinit var topGlobalButton: Button
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.principal)
+
         database = (applicationContext as App).database
         jugadorDao = database.jugadorDao()
+
         drawerLayout = findViewById(R.id.drawer_layout)
         toolbar = findViewById(R.id.toolbar)
         playButton = findViewById(R.id.playButton)
         coinsText = findViewById(R.id.coinsText)
         navigationView = findViewById(R.id.navigation_view)
         helpButton = findViewById(R.id.btnHelp)
-        navigationView.setNavigationItemSelectedListener(this)
-        topGlobalButton = findViewById(R.id.topGlobalButton)
 
-        // Inicializamos el FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         setSupportActionBar(toolbar)
-        setearTextMonedas()
-
         toggle = ActionBarDrawerToggle(
             this,
             drawerLayout,
@@ -70,77 +65,51 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
-
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        // 🔸 Solicitar permiso de ubicación al iniciar
+        navigationView.setNavigationItemSelectedListener(this)
+
+        setearTextMonedas()
         checkLocationPermission()
 
         playButton.setOnClickListener {
-            jugar()
+            startActivity(Intent(this, JuegoActivity::class.java))
         }
 
         helpButton.setOnClickListener {
-            val intent = Intent(this, HelpActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, HelpActivity::class.java))
         }
-
-        topGlobalButton.setOnClickListener {
-            val intent = Intent(this, TopGlobalActivity::class.java)
-            startActivity(intent)
-        }
-
-    }
-
-    private fun jugar() {
-        val intent = Intent(this, JuegoActivity::class.java)
-        startActivity(intent)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_inicio -> {
-                val intent = Intent(this, PrincipalActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_historial -> {
-                val intent = Intent(this, HistorialActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_ajustes -> {
-                val intent = Intent(this, AjustesActivity::class.java)
-                startActivity(intent)
-            }
+            R.id.nav_inicio -> startActivity(Intent(this, PrincipalActivity::class.java))
+            R.id.nav_historial -> startActivity(Intent(this, HistorialActivity::class.java))
+            R.id.nav_ajustes -> startActivity(Intent(this, AjustesActivity::class.java))
         }
-
         drawerLayout.closeDrawer(GravityCompat.START)
         item.isChecked = false
         return true
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables.clear()
-    }
-
     override fun onResume() {
         super.onResume()
         setearTextMonedas()
-        navigationView.setCheckedItem(0)
-        val menu = navigationView.menu
-        for (i in 0 until menu.size) {
-            menu[i].isChecked = false
-        }
+        clearNavSelection()
     }
 
     override fun onStart() {
         super.onStart()
         setearTextMonedas()
+        clearNavSelection()
+    }
+
+    private fun clearNavSelection() {
         navigationView.setCheckedItem(0)
         val menu = navigationView.menu
-        for (i in 0 until menu.size) {
-            menu[i].isChecked = false
+        for (i in 0 until menu.size()) {
+            menu.getItem(i).isChecked = false
         }
     }
 
@@ -151,12 +120,11 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             .subscribe({ jugadorBD ->
                 coinsText.text = jugadorBD.cantidadMonedas.toString()
             }, { error ->
-                Log.e("JuegoActivity", "Error al obtener jugador", error)
+                Log.e("PrincipalActivity", "Error al obtener jugador", error)
             })
         disposables.add(disp)
     }
 
-    // 🔸 Solicitud de permisos
     private fun checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -171,22 +139,19 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }
     }
 
-    // 🔸 Manejo del resultado de la solicitud
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.d("Permisos", "Permiso de ubicación concedido")
+            Log.d("Permisos", getString(R.string.toast_permiso_concedido))
         } else {
-            Log.d("Permisos", "Permiso de ubicación denegado")
+            Log.d("Permisos", getString(R.string.toast_permiso_denegado))
         }
     }
 
-    // 🔸 Obtener la ubicación actual
     private fun obtenerUbicacionActual() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -196,20 +161,30 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
                     if (location != null) {
-                        Log.d("Ubicación", "Latitud: ${location.latitude}, Longitud: ${location.longitude}")
+                        Log.d(
+                            "Ubicación",
+                            getString(R.string.log_ubicacion_latlng, location.latitude, location.longitude)
+                        )
                         guardarUbicacion(location.latitude, location.longitude)
                     } else {
-                        Log.d("Ubicación", "Ubicación no disponible")
+                        Log.d("Ubicación", getString(R.string.log_ubicacion_no_disponible))
                     }
                 }
         } else {
-            Log.d("Permisos", "Permiso de ubicación no concedido")
+            Log.d("Permisos", getString(R.string.toast_permiso_denegado))
         }
     }
 
-    // 🔸 Guardar ubicación cuando el jugador gana
     private fun guardarUbicacion(latitude: Double, longitude: Double) {
-        // Aquí puedes guardar la ubicación en tu base de datos o realizar alguna acción
-        Log.d("Ubicación guardada", "Latitud: $latitude, Longitud: $longitude")
+        Log.d(
+            "Ubicación guardada",
+            getString(R.string.log_ubicacion_guardada, latitude, longitude)
+        )
+        // Aquí puedes persistir la ubicación si lo deseas
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.clear()
     }
 }

@@ -12,7 +12,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="83dp"
-        android:baselineAligned="true"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -21,7 +20,7 @@
             android:layout_width="81dp"
             android:layout_height="36dp"
             android:background="?attr/selectableItemBackground"
-            android:contentDescription="back"
+            android:contentDescription="@string/navigation_drawer_close"
             android:maxWidth="48dp"
             android:maxHeight="48dp"
             android:scaleType="fitCenter"
@@ -33,7 +32,7 @@
             android:layout_height="60dp"
             android:fontFamily="@font/roboto_bold"
             android:gravity="center"
-            android:text="Historial"
+            android:text="@string/titleHistorial"
             android:textAlignment="center"
             android:textSize="34sp" />
 
@@ -43,12 +42,11 @@
             android:layout_height="61dp"
             android:layout_weight="1"
             android:backgroundTint="@android:color/holo_red_dark"
-            android:text="Reset" />
+            android:text="@string/btnReset" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewHistorial"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 </LinearLayout>

@@ -9,17 +9,16 @@ import android.provider.Settings
 import android.util.Log
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import com.example.la_ruleta_de_la_suerte.R
+import com.example.la_ruleta_de_la_suerte.data.local.db.App
 import com.example.la_ruleta_de_la_suerte.ui.main.services.MusicService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import com.example.la_ruleta_de_la_suerte.data.local.db.App
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
+import java.util.*
 
 class AjustesActivity : AppCompatActivity() {
 
@@ -29,9 +28,9 @@ class AjustesActivity : AppCompatActivity() {
     private lateinit var audioSwitch: SwitchCompat
     private lateinit var resetMonedas: Button
     private lateinit var backButton: ImageButton
+    private lateinit var idiomaBtn: Button
     private lateinit var audioManager: AudioManager
     private lateinit var notificationManager: NotificationManager
-    private lateinit var logoutButton: Button
 
     private val disposables = CompositeDisposable()
 
@@ -48,11 +47,21 @@ class AjustesActivity : AppCompatActivity() {
                 putExtra("songUri", it.toString())
             }
             startService(intent)
-            Toast.makeText(this, "Reproduciendo canción seleccionada", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_reproduciendo_cancion), Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Restaurar idioma guardado
+        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        prefs.getString("idioma", null)?.let {
+            val locale = Locale(it)
+            Locale.setDefault(locale)
+            val config = resources.configuration
+            config.setLocale(locale)
+            resources.updateConfiguration(config, resources.displayMetrics)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.ajustes)
 
@@ -63,19 +72,15 @@ class AjustesActivity : AppCompatActivity() {
         audioSwitch = findViewById(R.id.sonidoSwitch)
         resetMonedas = findViewById(R.id.resetMonedas)
         backButton = findViewById(R.id.back_button4)
-        logoutButton = findViewById(R.id.logOutButton)
+        idiomaBtn = findViewById(R.id.selecIdioma)
 
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         // Preferencias
-        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-
-        // Cargar preferencia de música y aplicar estado
         isMusicOn = prefs.getBoolean("musica", true)
         musicaSwitch.isChecked = isMusicOn
 
-        // Estado inicial del switch de audio basado en el modo del dispositivo
         audioSwitch.isChecked = audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL
 
         audioSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -92,12 +97,8 @@ class AjustesActivity : AppCompatActivity() {
 
         sonidoSwitch.setOnCheckedChangeListener { _, isChecked ->
             isSoundOn = isChecked
-            Toast.makeText(
-                this,
-                if (isChecked) "Efectos activados" else "Efectos desactivados",
-                Toast.LENGTH_SHORT
-            ).show()
-            // Aquí podrías agregar lógica para activar/desactivar efectos
+            val msgRes = if (isChecked) R.string.toast_efectos_activados else R.string.toast_efectos_desactivados
+            Toast.makeText(this, getString(msgRes), Toast.LENGTH_SHORT).show()
         }
 
         musicaSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -107,10 +108,10 @@ class AjustesActivity : AppCompatActivity() {
             val intent = Intent(this, MusicService::class.java)
             if (isChecked) {
                 startService(intent)
-                Toast.makeText(this, "Música activada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_musica_activada), Toast.LENGTH_SHORT).show()
             } else {
                 stopService(intent)
-                Toast.makeText(this, "Música desactivada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_musica_desactivada), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -124,9 +125,10 @@ class AjustesActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     Log.d("AjustesActivity", "Monedas reseteadas")
-                    Toast.makeText(this, "Monedas reseteadas", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.toast_monedas_reseteadas), Toast.LENGTH_SHORT).show()
                 }, { error ->
                     Log.e("AjustesActivity", "Error al resetear monedas", error)
+                    Toast.makeText(this, getString(R.string.toast_error_reset), Toast.LENGTH_SHORT).show()
                 })
             disposables.add(disp)
         }
@@ -135,27 +137,56 @@ class AjustesActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        logoutButton.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            googleSignInClient.signOut().addOnCompleteListener {
-                val intent = Intent(this, BienvenidaActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-            }
+        idiomaBtn.setOnClickListener {
+            mostrarSelectorDeIdioma()
         }
 
-        // Si no tiene permisos para cambiar el modo de notificaciones, redirige
         if (!notificationManager.isNotificationPolicyAccessGranted) {
             startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
         }
+    }
+
+    private fun mostrarSelectorDeIdioma() {
+        val idiomas = arrayOf(
+            getString(R.string.selector_idioma_op1),
+            getString(R.string.selector_idioma_op2),
+            getString(R.string.selector_idioma_op3),
+            getString(R.string.selector_idioma_op4)
+        )
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.selector_idioma_title))
+            .setItems(idiomas) { _, which ->
+                when (which) {
+                    0 -> {
+                        getSharedPreferences("settings", MODE_PRIVATE).edit()
+                            .remove("idioma")
+                            .apply()
+                        Toast.makeText(this, getString(R.string.toast_idioma_sistema), Toast.LENGTH_SHORT).show()
+                        recreate()
+                    }
+                    1 -> cambiarIdioma("es")
+                    2 -> cambiarIdioma("en")
+                }
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun cambiarIdioma(codigoIdioma: String) {
+        val locale = Locale(codigoIdioma)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+        getSharedPreferences("settings", MODE_PRIVATE)
+            .edit()
+            .putString("idioma", codigoIdioma)
+            .apply()
+
+        Toast.makeText(this, getString(R.string.toast_idioma_cambiado, locale.displayLanguage), Toast.LENGTH_SHORT).show()
+        recreate()
     }
 
     override fun onDestroy() {
