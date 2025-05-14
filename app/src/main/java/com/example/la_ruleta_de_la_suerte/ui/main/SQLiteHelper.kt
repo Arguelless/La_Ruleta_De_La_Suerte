@@ -1,3 +1,11 @@
+import android.content.ContentValues
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, "ubicaciones.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {

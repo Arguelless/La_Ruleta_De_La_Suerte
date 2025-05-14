@@ -27,6 +27,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import androidx.core.view.size
+import androidx.core.view.get
 
 class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var drawerLayout: DrawerLayout
@@ -119,8 +120,9 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         super.onResume()
         setearTextMonedas()
         navigationView.setCheckedItem(0)
-        for (i in 0 until navigationView.menu.size) {
-            navigationView.menu[i].isChecked = false
+        val menu = navigationView.menu
+        for (i in 0 until menu.size) {
+            menu[i].isChecked = false
         }
     }
 
@@ -128,8 +130,9 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         super.onStart()
         setearTextMonedas()
         navigationView.setCheckedItem(0)
-        for (i in 0 until navigationView.menu.size) {
-            navigationView.menu[i].isChecked = false
+        val menu = navigationView.menu
+        for (i in 0 until menu.size) {
+            menu[i].isChecked = false
         }
     }
 
