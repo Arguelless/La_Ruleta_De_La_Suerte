@@ -31,12 +31,17 @@ import com.example.la_ruleta_de_la_suerte.data.local.dao.JugadorDao
 import com.example.la_ruleta_de_la_suerte.data.local.dao.PartidaDao
 import com.example.la_ruleta_de_la_suerte.data.local.db.App
 import com.example.la_ruleta_de_la_suerte.data.local.db.AppDatabase
+import com.example.la_ruleta_de_la_suerte.data.local.db.RetrofitInstance.firebaseApi
 import com.example.la_ruleta_de_la_suerte.data.local.model.Jugador
 import com.example.la_ruleta_de_la_suerte.data.local.model.Partida
+import com.example.la_ruleta_de_la_suerte.data.local.model.PlayerScore
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import retrofit2.Callback
+import retrofit2.Call
+import retrofit2.Response
 import java.io.IOException
 import java.util.Calendar
 import java.util.TimeZone
@@ -214,6 +219,7 @@ class JuegoActivity : AppCompatActivity() {
                 Log.e("JuegoActivity", "Error al insertar partida", error)
             })
 
+        enviarPuntuacion("Marcos",partida.diferenciaMonedas)
         disposables.add(disposable)
         disposables.add(disposable2)
         val intent = Intent(this, PrincipalActivity::class.java)
@@ -385,6 +391,23 @@ class JuegoActivity : AppCompatActivity() {
 
     }
 
+    fun enviarPuntuacion(nombre: String, puntos: Int) {
+        val partida = PlayerScore(nombre, puntos)
+
+        firebaseApi.addPlayerScore(partida).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("Firebase", "Puntuación enviada correctamente")
+                } else {
+                    Log.e("Firebase", "Error al enviar: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.e("Firebase", "Fallo en la conexión", t)
+            }
+        })
+    }
 
 
 

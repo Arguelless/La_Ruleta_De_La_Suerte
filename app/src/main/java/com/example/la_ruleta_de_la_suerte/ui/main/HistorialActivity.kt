@@ -27,7 +27,7 @@ class HistorialActivity : AppCompatActivity() {
     private lateinit var backButton: ImageButton
     private lateinit var reset: Button
     private val disposables = CompositeDisposable()
-    private lateinit var adapter: HistorialAdapter // Declaración del adaptador
+    private lateinit var adapter: HistorialAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

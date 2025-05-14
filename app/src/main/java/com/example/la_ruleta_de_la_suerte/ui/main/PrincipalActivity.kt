@@ -41,6 +41,7 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private lateinit var navigationView: NavigationView
     private lateinit var helpButton: Button
     private lateinit var fusedLocationClient: FusedLocationProviderClient  // Para obtener la ubicación
+    private lateinit var topGlobalButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +55,7 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         navigationView = findViewById(R.id.navigation_view)
         helpButton = findViewById(R.id.btnHelp)
         navigationView.setNavigationItemSelectedListener(this)
+        topGlobalButton = findViewById(R.id.topGlobalButton)
 
         // Inicializamos el FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -83,6 +85,12 @@ class PrincipalActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             val intent = Intent(this, HelpActivity::class.java)
             startActivity(intent)
         }
+
+        topGlobalButton.setOnClickListener {
+            val intent = Intent(this, TopGlobalActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun jugar() {
