@@ -15,16 +15,17 @@
         android:gravity="center_vertical"
         android:paddingEnd="8dp"
         android:text="Marc"
-        android:textAlignment="textEnd"
+        android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_resultado"
-        android:layout_width="114dp"
+        android:layout_width="wrap_content"
         android:layout_height="38dp"
         android:gravity="center_vertical"
-        android:text="+1240 Coins"
+        android:text="1240 Coins"
+        android:textAlignment="viewStart"
         android:textSize="16sp"
         android:textStyle="bold" />
 

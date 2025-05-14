@@ -31,7 +31,7 @@ class TopGlobalAdapter(private val partidas: List<PlayerScore>) :
             val sdf = SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault())
             val partida = partidas[position]
             holder.resultado.text = "${partida.coinDif} Coins"
-            holder.nombreusuario.text = "${position}. ${partida.name}"
+            holder.nombreusuario.text = "${position + 1}. ${partida.name}"
             holder.fecha.text = sdf.format(Date(partida.date))
 
         }

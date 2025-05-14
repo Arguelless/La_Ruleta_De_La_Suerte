@@ -36,6 +36,7 @@ import com.example.la_ruleta_de_la_suerte.data.local.model.Jugador
 import com.example.la_ruleta_de_la_suerte.data.local.model.Partida
 import com.example.la_ruleta_de_la_suerte.data.local.model.PlayerScore
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -218,8 +219,10 @@ class JuegoActivity : AppCompatActivity() {
                 // Maneja errores si los hay
                 Log.e("JuegoActivity", "Error al insertar partida", error)
             })
+        val user = FirebaseAuth.getInstance().currentUser?.displayName
 
-        enviarPuntuacion("Marcos",partida.diferenciaMonedas)
+
+        enviarPuntuacion(user.toString(),partida.diferenciaMonedas)
         disposables.add(disposable)
         disposables.add(disposable2)
         val intent = Intent(this, PrincipalActivity::class.java)
