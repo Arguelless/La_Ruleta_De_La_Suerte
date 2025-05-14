@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "627895778992",
+    "firebase_url": "https://laruletadelasuertee-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "laruletadelasuertee",
     "storage_bucket": "laruletadelasuertee.firebasestorage.app"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "627895778992-etqp1mec88jd9fioobc8904e4gdojp50.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.la_ruleta_de_la_suerte",
+            "certificate_hash": "7f0682424884c59bd67fb59d6f4e5eddd3aefca7"
+          }
+        },
         {
           "client_id": "627895778992-tche2gtr1i1bf005jkjervu60bt2ac0l.apps.googleusercontent.com",
           "client_type": 3

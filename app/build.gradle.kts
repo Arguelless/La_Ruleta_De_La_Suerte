@@ -54,7 +54,8 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
-
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
     implementation(libs.androidx.room.rxjava3)
     implementation(libs.rxjava)
     implementation(libs.rxandroid)
