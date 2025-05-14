@@ -17,6 +17,9 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import com.example.la_ruleta_de_la_suerte.data.local.db.App
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 
 class AjustesActivity : AppCompatActivity() {
 
@@ -28,6 +31,7 @@ class AjustesActivity : AppCompatActivity() {
     private lateinit var backButton: ImageButton
     private lateinit var audioManager: AudioManager
     private lateinit var notificationManager: NotificationManager
+    private lateinit var logoutButton: Button
 
     private val disposables = CompositeDisposable()
 
@@ -59,6 +63,7 @@ class AjustesActivity : AppCompatActivity() {
         audioSwitch = findViewById(R.id.sonidoSwitch)
         resetMonedas = findViewById(R.id.resetMonedas)
         backButton = findViewById(R.id.back_button4)
+        logoutButton = findViewById(R.id.logOutButton)
 
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -128,6 +133,23 @@ class AjustesActivity : AppCompatActivity() {
 
         backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        logoutButton.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            googleSignInClient.signOut().addOnCompleteListener {
+                val intent = Intent(this, BienvenidaActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
         }
 
         // Si no tiene permisos para cambiar el modo de notificaciones, redirige

@@ -176,4 +176,19 @@
         app:layout_constraintTop_toBottomOf="@id/sonidoText2"
         app:layout_constraintVertical_bias="0.351" />
 
+    <Button
+        android:id="@+id/logOutButton"
+        android:layout_width="231dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:gravity="center"
+        android:text="Cerrar sesión"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selecIdioma"
+        app:layout_constraintVertical_bias="0.696" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
