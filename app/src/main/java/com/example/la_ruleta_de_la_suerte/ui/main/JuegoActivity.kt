@@ -33,7 +33,6 @@ import com.example.la_ruleta_de_la_suerte.data.local.db.App
 import com.example.la_ruleta_de_la_suerte.data.local.db.AppDatabase
 import com.example.la_ruleta_de_la_suerte.data.local.model.Jugador
 import com.example.la_ruleta_de_la_suerte.data.local.model.Partida
-import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -59,15 +58,10 @@ class JuegoActivity : AppCompatActivity() {
     private val disposables = CompositeDisposable()
     private var monedasDB: Int = 0
 
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Inicialización de las vistas
         setContentView(R.layout.juego)
+
         database = (applicationContext as App).database
         jugadorDao = database.jugadorDao()
         partidaDao = database.partidaDao()
@@ -76,201 +70,146 @@ class JuegoActivity : AppCompatActivity() {
         botonVictoria = findViewById(R.id.botonVictoria)
         leaveButton = findViewById(R.id.leaveButton)
         monedas = findViewById(R.id.coinsText2)
+
         inicializarJugador()
-
-        // Acción al presionar el botón de girar
-        botonGirar.setOnClickListener {
-            girarRuleta()
-        }
-
-        // Acción al presionar el botón de victoria
-        botonVictoria.setOnClickListener {
-            guardarVictoria()
-        }
-
-        // Acción al presionar el botón de salir
-        leaveButton.setOnClickListener {
-            volverPrincipal()
-        }
-
-        // Solicitar permisos necesarios
         solicitarPermisos()
+
+        botonGirar.setOnClickListener { girarRuleta() }
+        botonVictoria.setOnClickListener { guardarVictoria() }
+        leaveButton.setOnClickListener { volverPrincipal() }
     }
 
-    // Función para girar la ruleta
     private fun girarRuleta() {
         val nuevoAngulo = (360..3960).random()
-
         val rotate = RotateAnimation(
             anguloActual,
             anguloActual + nuevoAngulo.toFloat(),
             Animation.RELATIVE_TO_SELF, 0.5f,
             Animation.RELATIVE_TO_SELF, 0.5f
-        )
+        ).apply {
+            duration = 3000
+            fillAfter = true
+            interpolator = DecelerateInterpolator()
+            setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {
+                    botonGirar.isEnabled = false
+                }
 
-        rotate.duration = 3000
-        rotate.fillAfter = true
-        rotate.interpolator = DecelerateInterpolator()
+                override fun onAnimationEnd(animation: Animation?) {
+                    botonGirar.isEnabled = true
+                    val resultado = ((anguloActual + nuevoAngulo) % 360).toInt()
+                    mostrarResultado(resultado)
+                    anguloActual = (anguloActual + nuevoAngulo) % 360
+                }
 
-        rotate.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                botonGirar.isEnabled = false
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
-                botonGirar.isEnabled = true
-                val resultado = ((anguloActual + nuevoAngulo) % 360).toInt()
-                mostrarResultado(resultado)
-                anguloActual = (anguloActual + nuevoAngulo) % 360
-            }
-
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-
+                override fun onAnimationRepeat(animation: Animation?) {}
+            })
+        }
         ruletaImage.startAnimation(rotate)
     }
 
-    // Función para mostrar el resultado de la ruleta
     private fun mostrarResultado(anguloFinal: Int) {
-    val sector1 = (anguloFinal/60)
-
-        val anguloAjustado = (360 - anguloFinal + 90) % 360  // 90° extra para mover el 0° a la derecha
+        val anguloAjustado = (360 - anguloFinal + 90) % 360
         val sectorSize = 360f / 7
         val sector = (anguloAjustado / sectorSize).toInt()
-        var mensaje = ""
+
+        val mensaje: String
         var iconoNotificacion = R.drawable.ic_victory
-        when(sector) {
-            0 -> {
-                mensaje = "Otra vez"
-            }
+
+        when (sector) {
+            0 -> mensaje = getString(R.string.otraVez)
             1 -> {
-                mensaje = "x 2"
+                mensaje = getString(R.string.sectorX2)
                 actualizarMonedas(monedasDB)
-                iconoNotificacion = R.drawable.ic_victory
             }
             2 -> {
-                mensaje = "Quiebra"
+                mensaje = getString(R.string.Quiebra)
                 actualizarMonedas(-monedasDB)
                 iconoNotificacion = R.drawable.ic_lose
             }
             3 -> {
-                mensaje = "+ 500"
+                mensaje = getString(R.string.sector_mas_500)
                 actualizarMonedas(500)
-                iconoNotificacion = R.drawable.ic_victory
             }
             4 -> {
-                mensaje = "- 100"
+                mensaje = getString(R.string.sector_menos_100)
                 actualizarMonedas(-100)
                 iconoNotificacion = R.drawable.ic_lose
             }
             5 -> {
-                mensaje = "+ 100"
+                mensaje = getString(R.string.sector_mas_100)
                 actualizarMonedas(100)
-                iconoNotificacion = R.drawable.ic_victory
             }
             6 -> {
-                mensaje = "- 500"
+                mensaje = getString(R.string.sector_menos_500)
                 actualizarMonedas(-500)
                 iconoNotificacion = R.drawable.ic_lose
             }
-
+            else -> mensaje = ""
         }
-        val inflater: LayoutInflater = getLayoutInflater()
-        val layout: View? = inflater.inflate(R.layout.toast_con_icono, null)
 
-        val text = layout!!.findViewById<TextView?>(R.id.toast_text)
-        text.text = mensaje
+        val layout = LayoutInflater.from(this).inflate(R.layout.toast_con_icono, null)
+        layout.findViewById<TextView>(R.id.toast_text).text = mensaje
+        layout.findViewById<ImageView>(R.id.toast_icon).setImageResource(iconoNotificacion)
 
-        val icon = layout.findViewById<ImageView?>(R.id.toast_icon)
-        icon.setImageResource(iconoNotificacion)
-        val toast = Toast(applicationContext)
-        toast.setDuration(Toast.LENGTH_SHORT)
-        toast.setView(layout)
-        toast.show()
-
-        //Toast.makeText(this, "¡Has caído en el sector $mensaje!", Toast.LENGTH_SHORT).show()
+        Toast(applicationContext).apply {
+            duration = Toast.LENGTH_SHORT
+            view = layout
+            show()
+        }
     }
 
-    // Función para volver a la actividad principal
     private fun volverPrincipal() {
         jugador.cantidadMonedas = monedasDB
-        val disposable = jugadorDao.actualizarJugador(jugador)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Log.d("JuegoActivity", "Jugador actualizado con éxito")
-            }, { error ->
-                // Maneja errores si los hay
-                Log.e("JuegoActivity", "Error al obtener jugador", error)
-            })
-        val partida = Partida(0,System.currentTimeMillis(), monedasDB - monedasIniciales, monedasDB)
-        val disposable2 = partidaDao.insertar(partida)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Log.d("JuegoActivity", "Partida insertada con éxito")
-            }, { error ->
-                // Maneja errores si los hay
-                Log.e("JuegoActivity", "Error al insertar partida", error)
-            })
+        val partida = Partida(0, System.currentTimeMillis(), monedasDB - monedasIniciales, monedasDB)
 
-        disposables.add(disposable)
-        disposables.add(disposable2)
-        val intent = Intent(this, PrincipalActivity::class.java)
-        startActivity(intent)
+        val updateJugador = jugadorDao.actualizarJugador(jugador)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({}, { error -> Log.e("JuegoActivity", "Error al actualizar jugador", error) })
+
+        val insertarPartida = partidaDao.insertar(partida)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({}, { error -> Log.e("JuegoActivity", "Error al insertar partida", error) })
+
+        disposables.addAll(updateJugador, insertarPartida)
+        startActivity(Intent(this, PrincipalActivity::class.java))
     }
 
-    // Función para guardar la victoria
     private fun guardarVictoria() {
-        val rootView = window.decorView.findViewById<View>(android.R.id.content)
-        val screenshot = captureScreen(rootView)
-
-        // Guardar la captura de pantalla y añadir al calendario
-        saveVictoryScreenshot(screenshot, this)
-        addVictoryToCalendar(this)
-
-        Toast.makeText(this, "Victoria guardada y añadida al calendario", Toast.LENGTH_SHORT).show()
+        val screenshot = captureScreen(window.decorView.findViewById(android.R.id.content))
+        saveVictoryScreenshot(screenshot)
+        addVictoryToCalendar()
+        Toast.makeText(this, getString(R.string.toastVictoria), Toast.LENGTH_SHORT).show()
     }
 
-    // Función para capturar la vista de la actividad
-    private fun captureScreen(view: View): Bitmap {
-        // Crear un bitmap del tamaño de la vista
-        val screenshot = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        // Crear un lienzo donde dibujar la vista
-        val canvas = Canvas(screenshot)
-        // Dibujar la vista sobre el lienzo
-        view.draw(canvas)
-        return screenshot
+    private fun captureScreen(view: View): Bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888).apply {
+        Canvas(this).apply { view.draw(this) }
     }
 
-    // Función para solicitar los permisos necesarios
     private fun solicitarPermisos() {
-        val permisos = mutableListOf<String>()
-
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-            permisos.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val permisos = mutableListOf<String>().apply {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P)
+                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            add(Manifest.permission.WRITE_CALENDAR)
+            add(Manifest.permission.READ_CALENDAR)
         }
 
-        permisos.add(Manifest.permission.WRITE_CALENDAR)
-        permisos.add(Manifest.permission.READ_CALENDAR)
-
-        val permisosNoConcedidos = permisos.filter {
+        val noConcedidos = permisos.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
 
-        if (permisosNoConcedidos.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, permisosNoConcedidos.toTypedArray(), REQUEST_CODE_PERMISOS)
+        if (noConcedidos.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, noConcedidos.toTypedArray(), REQUEST_CODE_PERMISOS)
         }
     }
 
-    // Función para guardar la captura de pantalla
-    private fun saveVictoryScreenshot(screenshot: Bitmap, context: JuegoActivity) {
-        val contentResolver = context.contentResolver
-        val imageCollection: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    private fun saveVictoryScreenshot(screenshot: Bitmap) {
+        val resolver = contentResolver
+        val imageCollection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        } else {
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        }
+        else MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, "victoria_${System.currentTimeMillis()}.png")
@@ -278,118 +217,83 @@ class JuegoActivity : AppCompatActivity() {
             put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
         }
 
-        val imageUri = contentResolver.insert(imageCollection, values)
-
+        val imageUri = resolver.insert(imageCollection, values)
         if (imageUri != null) {
             try {
-                contentResolver.openOutputStream(imageUri)?.use { outputStream ->
-                    screenshot.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                resolver.openOutputStream(imageUri)?.use {
+                    screenshot.compress(Bitmap.CompressFormat.PNG, 100, it)
                 }
-
-                Toast.makeText(context, "Captura guardada en la galería", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_guardado_galeria), Toast.LENGTH_SHORT).show()
             } catch (e: IOException) {
-                e.printStackTrace()
-                Toast.makeText(context, "Error al guardar la captura", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_guardado_error), Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(context, "Error al obtener URI de la galería", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.toast_uri_error), Toast.LENGTH_SHORT).show()
         }
     }
 
-    // Función para agregar la victoria al calendario
-    private fun addVictoryToCalendar(context: JuegoActivity) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+    private fun addVictoryToCalendar() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
             val calendar = Calendar.getInstance()
 
-            val eventValues = ContentValues().apply {
+            val values = ContentValues().apply {
                 put(CalendarContract.Events.DTSTART, calendar.timeInMillis)
                 put(CalendarContract.Events.DTEND, calendar.timeInMillis + DateUtils.HOUR_IN_MILLIS)
-                put(CalendarContract.Events.TITLE, "Victoria en la Ruleta de la Suerte")
-                put(CalendarContract.Events.DESCRIPTION, "¡Felicidades! Has ganado en la ruleta de la suerte.")
+                put(CalendarContract.Events.TITLE, getString(R.string.evento_titulo))
+                put(CalendarContract.Events.DESCRIPTION, getString(R.string.evento_descripcion))
                 put(CalendarContract.Events.CALENDAR_ID, 1)
                 put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().id)
             }
 
-            val uri = context.contentResolver.insert(CalendarContract.Events.CONTENT_URI, eventValues)
-
-            if (uri != null) {
-                Toast.makeText(context, "Victoria añadida al calendario", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(context, "Error al añadir victoria al calendario", Toast.LENGTH_SHORT).show()
-            }
+            val uri = contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
+            val mensaje = if (uri != null) R.string.toast_evento_calendario_exito else R.string.toast_evento_calendario_error
+            Toast.makeText(this, getString(mensaje), Toast.LENGTH_SHORT).show()
         } else {
             ActivityCompat.requestPermissions(
-                context,
+                this,
                 arrayOf(Manifest.permission.WRITE_CALENDAR),
                 REQUEST_CODE_PERMISOS
             )
         }
     }
 
-    // Manejo de la respuesta de la solicitud de permisos
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISOS) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                addVictoryToCalendar(this)
-            } else {
-                Toast.makeText(this, "Permiso denegado, no se puede añadir victoria al calendario", Toast.LENGTH_SHORT).show()
-            }
+        if (requestCode == REQUEST_CODE_PERMISOS && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            addVictoryToCalendar()
+        } else {
+            Toast.makeText(this, getString(R.string.toast_permiso_calendario_denegado), Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun inicializarJugador() {
         val disposable = jugadorDao.obtenerJugador()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({jugadorBD ->
+            .subscribe({ jugadorBD ->
                 jugador = jugadorBD
                 monedasDB = jugadorBD.cantidadMonedas
                 monedasIniciales = jugadorBD.cantidadMonedas
                 monedas.text = monedasDB.toString()
             }, { error ->
-                // Maneja errores si los hay
-
                 Log.e("JuegoActivity", "Error al obtener jugador", error)
             })
-
         disposables.add(disposable)
-
     }
 
     private fun actualizarMonedas(monedasASumar: Int) {
-
         monedasDB += monedasASumar
         monedas.text = monedasDB.toString()
     }
-
 
     override fun onDestroy() {
         jugador.cantidadMonedas = monedasDB
         val disposable = jugadorDao.actualizarJugador(jugador)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Log.d("JuegoActivity", "Jugador actualizado con éxito")
-            }, { error ->
-                // Maneja errores si los hay
-                Log.e("JuegoActivity", "Error al obtener jugador", error)
-            })
+            .subscribe({}, { error -> Log.e("JuegoActivity", "Error al actualizar jugador", error) })
+        disposables.add(disposable)
+        disposables.clear()
         super.onDestroy()
-
-
-        disposables.clear() // Cancela todas las suscripciones
-
     }
-
-
-
-
-
-
-
-
 }

@@ -1,6 +1,5 @@
 package com.example.la_ruleta_de_la_suerte.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -18,7 +17,6 @@ import com.example.la_ruleta_de_la_suerte.utils.HistorialAdapter
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.Date
 
 class HistorialActivity : AppCompatActivity() {
     private lateinit var partidaDao: PartidaDao
@@ -27,18 +25,19 @@ class HistorialActivity : AppCompatActivity() {
     private lateinit var backButton: ImageButton
     private lateinit var reset: Button
     private val disposables = CompositeDisposable()
-    private lateinit var adapter: HistorialAdapter // Declaración del adaptador
+    private lateinit var adapter: HistorialAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.historial)
+
         database = (applicationContext as App).database
         partidaDao = database.partidaDao()
+
         backButton = findViewById(R.id.back_button)
         reset = findViewById(R.id.reset_button)
-
-
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewHistorial)
+
         adapter = HistorialAdapter(listOf())
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -52,38 +51,31 @@ class HistorialActivity : AppCompatActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    Log.d("HistorialActivity", "Historial borrado con éxito")
+                    Log.d("HistorialActivity", getString(R.string.logHistorialBorrado))
                     partidas = listOf()
                     recyclerView.adapter = HistorialAdapter(partidas)
-                    Toast.makeText(this, "Historial reseteado", Toast.LENGTH_SHORT).show()
-
+                    Toast.makeText(this, getString(R.string.toastHistorialReseteado), Toast.LENGTH_SHORT).show()
                 }, { error ->
-                    // Maneja errores si los hay
-                    Log.e("HistorialActivity", "Error al borrar historial", error)
+                    Log.e("HistorialActivity", getString(R.string.logHistorialErrorBorrar), error)
                 })
             disposables.add(disp)
         }
+
         val disp = partidaDao.obtenerTodas()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                partidasDB ->
+            .subscribe({ partidasDB ->
                 partidas = partidasDB
                 recyclerView.adapter = HistorialAdapter(partidas)
-                Log.d("HistorialActivity", "Historial extraido con éxito")
-
+                Log.d("HistorialActivity", getString(R.string.logHistorialCargado))
             }, { error ->
-                // Maneja errores si los hay
-                Log.e("HistorialActivity", "Error al obtener historial", error)
+                Log.e("HistorialActivity", getString(R.string.logHistorialErrorCargar), error)
             })
         disposables.add(disp)
-
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
     }
-
 }

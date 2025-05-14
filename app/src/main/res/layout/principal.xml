@@ -43,7 +43,7 @@
             android:layout_height="56dp"
             android:backgroundTint="@color/gold"
             android:fontFamily="@font/roboto_bold"
-            android:text="Jugar"
+            android:text="@string/btnJugar"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -81,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:text="La ruleta de la suerte"
+            android:text="@string/titulo"
             android:textSize="34sp"
             app:layout_constraintBottom_toTopOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,15 +92,10 @@
             android:id="@+id/btnHelp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ayuda"
+            android:text="@string/btnAyuda"
+            android:layout_margin="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="16dp" />
-
-
-
-
-
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Menú lateral -->

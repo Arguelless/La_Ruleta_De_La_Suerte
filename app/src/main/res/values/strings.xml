@@ -21,9 +21,36 @@
     <string name="btnAbandonar">Abandonar</string>
     <string name="Quiebra">Quiebra</string>
     <string name="otraVez">Otra Vez</string>
-    <string name="toastSector">Has caído en el sector</string>
     <string name="toastVictoria">Victoria guardada y añadida al calendario</string>
-
+    <string name="toast_permiso_concedido">Permiso de ubicación concedido</string>
+    <string name="toast_permiso_denegado">Permiso de ubicación denegado</string>
+    <string name="log_ubicacion_latlng">Latitud: %1$.4f, Longitud: %2$.4f</string>
+    <string name="log_ubicacion_no_disponible">Ubicación no disponible</string>
+    <string name="log_ubicacion_guardada">Ubicación guardada - Lat: %1$.4f, Lng: %2$.4f</string>
+    <string name="toastCapturaGuardada">Captura guardada en la galería</string>
+    <string name="toastErrorCaptura">Error al guardar la captura</string>
+    <string name="toastUriError">Error al obtener URI de la galería</string>
+    <string name="toastVictoriaCalendario">Victoria añadida al calendario</string>
+    <string name="toastErrorCalendario">Error al añadir victoria al calendario</string>
+    <string name="toastPermisoCalendarioDenegado">Permiso denegado, no se puede añadir victoria al calendario</string>
+    <string name="sectorOtraVez">Otra vez</string>
+    <string name="sectorQuiebra">Quiebra</string>
+    <string name="toastSector">Has caído en el sector %1$s</string>
+    <string name="calendar_event_title">Victoria en la Ruleta de la Suerte</string>
+    <string name="calendar_event_desc">¡Felicidades! Has ganado en la ruleta de la suerte.</string>
+    <string name="toast_guardado_galeria">Captura guardada en la galería</string>
+    <string name="toast_guardado_error">Error al guardar la captura</string>
+    <string name="toast_uri_error">Error al obtener URI de la galería</string>
+    <string name="toast_permiso_calendario_denegado">Permiso denegado, no se puede añadir victoria al calendario</string>
+    <string name="toast_evento_calendario_error">Error al añadir victoria al calendario</string>
+    <string name="toast_evento_calendario_exito">Victoria añadida al calendario</string>
+    <string name="evento_titulo">Victoria en la Ruleta de la Suerte</string>
+    <string name="evento_descripcion">¡Felicidades! Has ganado en la ruleta de la suerte.</string>
+    <string name="sectorX2">x 2</string>
+    <string name="sector_mas_500">+ 500</string>
+    <string name="sector_menos_100">- 100</string>
+    <string name="sector_mas_100">+ 100</string>
+    <string name="sector_menos_500">- 500</string>
     <!--seccion ayuda-->
     <string name="help_title">Centro de Ayuda</string>
     <string name="section_game_title">🎯 Instrucciones del Juego</string>
@@ -39,5 +66,27 @@
     <string name="support_email">soporte@ruletasuerte.com</string>
     <string name="footer"> 2025 Ruleta de la Suerte - Todos los derechos reservados.</string>
     <string name="titulo" tools:ignore="DuplicateDefinition">La ruleta de la suerte</string>
-
+    <string name="btnCerrarSesion">Cerrar sesión</string>
+    <string name="toast_musica_activada">Música activada</string>
+    <string name="toast_musica_desactivada">Música desactivada</string>
+    <string name="toast_efectos_activados">Efectos activados</string>
+    <string name="toast_efectos_desactivados">Efectos desactivados</string>
+    <string name="toast_reproduciendo_cancion">Reproduciendo canción seleccionada</string>
+    <string name="toast_monedas_reseteadas">Monedas reseteadas</string>
+    <string name="toast_error_reset">Error al resetear monedas</string>
+    <string name="selector_idioma_title">Seleccionar idioma</string>
+    <string name="selector_idioma_op1">Usar idioma del sistema</string>
+    <string name="selector_idioma_op2">Español</string>
+    <string name="selector_idioma_op3">Inglés</string>
+    <string name="selector_idioma_op4">Francés</string>
+    <string name="toast_idioma_sistema">Idioma del sistema seleccionado</string>
+    <string name="toast_idioma_cambiado">Idioma cambiado a %1$s</string>
+    <string name="btnVolver">Volver al Menú Principal</string>
+    <string name="btnReset">Reset</string>
+    <string name="titleHistorial">Historial</string>
+    <string name="toastHistorialReseteado">Historial reseteado</string>
+    <string name="logHistorialBorrado">Historial borrado con éxito</string>
+    <string name="logHistorialErrorBorrar">Error al borrar historial</string>
+    <string name="logHistorialCargado">Historial extraído con éxito</string>
+    <string name="logHistorialErrorCargar">Error al obtener historial</string>
 </resources>
