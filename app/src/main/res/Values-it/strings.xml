@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+	<string name="app_name">La_Ruleta_De_La_Suerte</string>
+	<string name="titulo">La ruleta de la suerte</string>
+	<string name="navigation_drawer_open">Apri menu</string>
+	<string name="navigation_drawer_close">Chiudi menu</string>
+	<string name="btnJugar">Gioca</string>
+	<string name="btnAyuda">Aiuto</string>
+	<string name="btnInicio">Home</string>
+	<string name="btnHistorial">Cronologia</string>
+	<string name="btnAjustes">Impostazioni</string>
+	<string name="Resultado">Risultato</string>
+	<string name="Total">Totale</string>
+	<string name="Coins">Monete</string>
+	<string name="Sonido">Suono</string>
+	<string name="Musica">Musica</string>
+	<string name="selectEfectosSonido">Effetti sonori</string>
+	<string name="btnCambiarCancion">Cambia canzone</string>
+	<string name="btnCambiarIdioma"/>
+	<string name="ajustes">Impostazioni</string>
+	<string name="btnGirar">Gira!</string>
+	<string name="btnGuardarVictoria">Salva vittoria</string>
+	<string name="btnAbandonar">Abbandona</string>
+	<string name="Quiebra">Bancarotta</string>
+	<string name="otraVez">Ancora</string>
+	<string name="toastSector">Sei finito nel settore</string>
+	<string name="toastVictoria">Vittoria salvata e aggiunta al calendario</string>
+	<string name="help_title">Centro assistenza</string>
+	<string name="section_game_title">🎯 Istruzioni di gioco</string>
+	<string name="section_game_p1">Benvenuto al gioco della ruota. Il tuo obiettivo è vincere monete facendo girare la ruota.</string>
+	<string name="section_game_p2">Premi il pulsante 'Gioca' per farla girare. A seconda di dove si ferma, vincerai delle monete... o niente!</string>
+	<string name="section_game_p3">Gestisci le tue monete con attenzione e torna ogni giorno per continuare a giocare.</string>
+	<string name="section_settings_title">⚙️ Menu impostazioni</string>
+	<string name="section_settings_p1">Nel menu impostazioni puoi:</string>
+	<string name="setting_reset">🔄 Reimposta le monete se vuoi ricominciare da zero.</string>
+	<string name="setting_sound">🔊 Attiva o disattiva suoni e musica a tuo piacimento.</string>
+	<string name="section_support_title">📩 Supporto</string>
+	<string name="support_text">Hai un problema o un suggerimento? Scrivici a</string>
+	<string name="support_email">soporte@ruletasuerte.com</string>
+	<string name="footer">© 2025 La ruleta de la suerte - Tutti i diritti riservati.</string>
+</resources>

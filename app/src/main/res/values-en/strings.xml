@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">La_Ruleta_De_La_Suerte</string>
+    <string name="footer">© 2025 La ruleta de la suerte - All rights reserved.</string>
+    <string name="titulo">La ruleta de la suerte</string>
+    <string name="navigation_drawer_open">Open menu</string>
+    <string name="navigation_drawer_close">Close menu</string>
+    <string name="btnJugar">Play</string>
+    <string name="btnAyuda">Help</string>
+    <string name="btnInicio">Home</string>
+    <string name="btnHistorial">History</string>
+    <string name="btnAjustes">Settings</string>
+    <string name="Resultado">Result</string>
+    <string name="Total">Total</string>
+    <string name="Coins">Coins</string>
+    <string name="Sonido">Sound</string>
+    <string name="Musica">Music volume</string>
+    <string name="selectEfectosSonido">Sound effects volume</string>
+    <string name="btnCambiarCancion">Change song</string>
+    <string name="btnCambiarIdioma">Language selector</string>
+    <string name="ajustes">Settings</string>
+    <string name="btnGirar">Spin!</string>
+    <string name="btnGuardarVictoria">Save victory</string>
+    <string name="btnAbandonar">Quit</string>
+    <string name="Quiebra">Bankrupt</string>
+    <string name="otraVez">Again</string>
+    <string name="toastSector">You landed on the sector</string>
+    <string name="toastVictoria">Victory saved and added to calendar</string>
+    <string name="help_title">Help center</string>
+    <string name="section_game_title">🎯 Game Instructions</string>
+    <string name="section_game_p1">Welcome to the roulette game. Your goal is to earn coins by spinning the wheel.</string>
+    <string name="section_game_p2">Press the \'Play\' button to spin it. Depending on where it stops, you\'ll win some coins… or nothing!</string>
+    <string name="section_game_p3">Manage your coins carefully and come back daily to keep playing.</string>
+    <string name="section_settings_title">⚙️ Settings Menu</string>
+    <string name="section_settings_p1">In the settings menu you can:</string>
+    <string name="setting_reset">🔄 Reset your coins if you want to start from scratch.</string>
+    <string name="setting_sound">🔊 Enable or disable sounds and music as you prefer.</string>
+    <string name="section_support_title">📩 Support</string>
+    <string name="support_text">Have any issues or suggestions? Write to us at</string>
+    <string name="support_email">soporte@ruletasuerte.com</string>
+</resources>

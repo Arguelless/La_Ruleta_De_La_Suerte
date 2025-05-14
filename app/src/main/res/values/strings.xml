@@ -1,7 +1,45 @@
 <resources>
     <string name="app_name">La_Ruleta_De_La_Suerte</string>
-    <string name="titulo">La ruleta de la suerte</string>
     <string name="navigation_drawer_open">Abrir menú</string>
     <string name="navigation_drawer_close">Cerrar menú</string>
+    <string name="btnJugar">Jugar</string>
+    <string name="btnAyuda">Ayuda</string>
+    <string name="btnInicio">Inicio</string>
+    <string name="btnHistorial">Historial</string>
+    <string name="btnAjustes">Ajustes</string>
+    <string name="Resultado">Resultado</string>
+    <string name="Total">Total</string>
+    <string name="Coins">Monedas</string>
+    <string name="Sonido">Sonido</string>
+    <string name="Musica">Música</string>
+    <string name="selectEfectosSonido">Efectos de sonido</string>
+    <string name="btnCambiarCancion">Cambiar canción</string>
+    <string name="btnCambiarIdioma">Cambiar idioma</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="btnGirar">¡Girar!</string>
+    <string name="btnGuardarVictoria">Guardar victoria</string>
+    <string name="btnAbandonar">Abandonar</string>
+    <string name="Quiebra">Quiebra</string>
+    <string name="otraVez">Otra Vez</string>
+    <string name="toastSector">Has caído en el sector</string>
+    <string name="toastVictoria">Victoria guardada y añadida al calendario</string>
+
+    <!--seccion ayuda-->
+    <string name="help_title">Centro de Ayuda</string>
+    <string name="section_game_title">🎯 Instrucciones del Juego</string>
+    <string name="section_game_p1">Bienvenido al juego de la ruleta. Tu objetivo es ganar monedas haciendo girar la ruleta.</string>
+    <string name="section_game_p2">Pulsa el botón “Jugar” para hacerla girar. Según dónde se detenga, ganarás una cantidad de monedas… ¡o nada!</string>
+    <string name="section_game_p3">Administra tus monedas con cuidado y vuelve cada día para seguir jugando.</string>
+    <string name="section_settings_title">⚙️ Menú de Ajustes</string>
+    <string name="section_settings_p1">En el menú de ajustes puedes:</string>
+    <string name="setting_reset">🔄 Reiniciar tus monedas si quieres empezar desde cero.</string>
+    <string name="setting_sound">🔊 Activar o desactivar sonidos y música según tu preferencia.</string>
+    <string name="section_support_title">📩 Soporte</string>
+    <string name="support_text">¿Tienes algún problema o sugerencia? Escríbenos a</string>
+    <string name="support_email">soporte@ruletasuerte.com</string>
+    <string name="footer">&copy; 2025 Ruleta de la Suerte - Todos los derechos reservados.</string>
+    <string name="titulo">La ruleta de la suerte</string>
+    <string name="titulo">LA</string>
+
 
 </resources>
