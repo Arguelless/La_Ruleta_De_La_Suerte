@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">La_Ruleta_De_La_Suerte</string>
     <string name="navigation_drawer_open">Abrir menú</string>
     <string name="navigation_drawer_close">Cerrar menú</string>
@@ -37,9 +37,7 @@
     <string name="section_support_title">📩 Soporte</string>
     <string name="support_text">¿Tienes algún problema o sugerencia? Escríbenos a</string>
     <string name="support_email">soporte@ruletasuerte.com</string>
-    <string name="footer">&copy; 2025 Ruleta de la Suerte - Todos los derechos reservados.</string>
-    <string name="titulo">La ruleta de la suerte</string>
-    <string name="titulo">LA</string>
-
+    <string name="footer"> 2025 Ruleta de la Suerte - Todos los derechos reservados.</string>
+    <string name="titulo" tools:ignore="DuplicateDefinition">La ruleta de la suerte</string>
 
 </resources>
