@@ -1,14 +1,8 @@
-<<<<<<< HEAD
-import android.content.Context
-import androidx.core.app.ActivityCompat
-import android.Manifest
-import android.content.pm.PackageManager
-=======
+
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
->>>>>>> 034d13530d38baf1a12342df9be277c9737f7bac
 import com.google.android.gms.location.LocationServices
 
 object LocationUtils {
