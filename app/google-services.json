@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "627895778992",
+    "project_id": "laruletadelasuertee",
+    "storage_bucket": "laruletadelasuertee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627895778992:android:1b0e61c091fe9477e9c575",
+        "android_client_info": {
+          "package_name": "com.example.la_ruleta_de_la_suerte"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9BdJMOeJQZSy2lDmYKqqpQ9o1wLNFgRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
