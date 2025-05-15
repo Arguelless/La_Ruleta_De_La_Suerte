@@ -294,13 +294,13 @@ class JuegoActivity : AppCompatActivity() {
                     screenshot.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
                 }
 
-                Toast.makeText(context, "Captura guardada en la galería", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.capturaGuardadaGaleria), Toast.LENGTH_SHORT).show()
             } catch (e: IOException) {
                 e.printStackTrace()
-                Toast.makeText(context, "Error al guardar la captura", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.errorGuardarCap), Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(context, "Error al obtener URI de la galería", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.errorObtenerUri), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -321,9 +321,9 @@ class JuegoActivity : AppCompatActivity() {
             val uri = context.contentResolver.insert(CalendarContract.Events.CONTENT_URI, eventValues)
 
             if (uri != null) {
-                Toast.makeText(context, "Victoria añadida al calendario", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.vicanyadidaCalendario), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, "Error al añadir victoria al calendario", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.errorAnyadirVictoria) , Toast.LENGTH_SHORT).show()
             }
         } else {
             ActivityCompat.requestPermissions(
@@ -345,7 +345,7 @@ class JuegoActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 addVictoryToCalendar(this)
             } else {
-                Toast.makeText(this, "Permiso denegado, no se puede añadir victoria al calendario", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.permisoDenegadoNoVic), Toast.LENGTH_SHORT).show()
             }
         }
     }

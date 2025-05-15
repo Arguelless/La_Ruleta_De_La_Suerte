@@ -89,4 +89,13 @@
     <string name="logHistorialErrorBorrar">Error deleting history</string>
     <string name="logHistorialCargado">History loaded successfully</string>
     <string name="logHistorialErrorCargar">Error loading history</string>
+    <string name="capturaGuardadaGaleria">Screenshot saved in gallery</string>
+    <string name="errorGuardarCap">Error saving the screenshot</string>
+    <string name="errorObtenerUri">Error getting gallery URI</string>
+    <string name="vicanyadidaCalendario">Victory added to the calendar</string>
+    <string name="errorAnyadirVictoria">Error adding victory to the calendar</string>
+    <string name="permisoDenegadoNoVic">Permission denied, cannot add victory to calendar</string>
+    <string name="errorInicioSesion">Login failed</string>
+    <string name="welcome">Welcome</string>
+    <string name="falloAutentication">Authentication failed</string>
 </resources>

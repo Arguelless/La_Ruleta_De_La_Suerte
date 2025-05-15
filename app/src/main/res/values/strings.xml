@@ -89,4 +89,13 @@
     <string name="logHistorialErrorBorrar">Error al borrar historial</string>
     <string name="logHistorialCargado">Historial extraído con éxito</string>
     <string name="logHistorialErrorCargar">Error al obtener historial</string>
+    <string name="capturaGuardadaGaleria">Captura guardada en la galería</string>
+    <string name="errorGuardarCap">Error al guardar la captura</string>
+    <string name="errorObtenerUri">Error al obtener URI de la galería</string>
+    <string name="vicanyadidaCalendario">Victoria añadida al calendario</string>
+    <string name="errorAnyadirVictoria">Error al añadir victoria al calendario</string>
+    <string name="permisoDenegadoNoVic">Permiso denegado, no se puede añadir victoria al calendario</string>
+    <string name="errorInicioSesion">Error al iniciar sesión</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="falloAutentication">Falló la autenticación</string>
 </resources>

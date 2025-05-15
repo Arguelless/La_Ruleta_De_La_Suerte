@@ -57,7 +57,7 @@ class BienvenidaActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
-                Toast.makeText(this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.errorInicioSesion), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -68,11 +68,11 @@ class BienvenidaActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    Toast.makeText(this, "Bienvenido ${user?.displayName}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, " ${getString(R.string.welcome)} ${user?.displayName}", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, PrincipalActivity::class.java)
                     startActivity(intent)
                 } else {
-                    Toast.makeText(this, "Falló la autenticación", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.falloAutentication), Toast.LENGTH_SHORT).show()
                 }
             }
     }
