@@ -33,7 +33,7 @@
             android:layout_height="60dp"
             android:fontFamily="@font/roboto_bold"
             android:gravity="center"
-            android:text="Top Global"
+            android:text="@string/btnTopGlobal"
             android:textAlignment="center"
             android:textSize="34sp" />
 

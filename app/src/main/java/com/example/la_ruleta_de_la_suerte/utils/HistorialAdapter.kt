@@ -31,7 +31,7 @@ class HistorialAdapter(private val partidas: List<Partida>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val sdf = SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.getDefault())
         val partida = partidas[position]
-        holder.resultado.text = "Resultado: ${partida.diferenciaMonedas} Coins"
+        holder.resultado.text = "Result: ${partida.diferenciaMonedas} Coins"
         holder.total.text = "Total: ${partida.totalMonedas} Coins"
         holder.fecha.text = sdf.format(Date(partida.fecha))
 

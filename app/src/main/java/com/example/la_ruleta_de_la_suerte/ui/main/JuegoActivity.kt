@@ -147,7 +147,7 @@ class JuegoActivity : AppCompatActivity() {
         var iconoNotificacion = R.drawable.ic_victory
         when(sector) {
             0 -> {
-                mensaje = "Otra vez"
+                mensaje = getString(R.string.otraVez)
             }
             1 -> {
                 mensaje = "x 2"
@@ -155,7 +155,7 @@ class JuegoActivity : AppCompatActivity() {
                 iconoNotificacion = R.drawable.ic_victory
             }
             2 -> {
-                mensaje = "Quiebra"
+                mensaje = getString(R.string.Quiebra)
                 actualizarMonedas(-monedasDB)
                 iconoNotificacion = R.drawable.ic_lose
             }
@@ -237,7 +237,7 @@ class JuegoActivity : AppCompatActivity() {
         saveVictoryScreenshot(screenshot, this)
         addVictoryToCalendar(this)
 
-        Toast.makeText(this, "Victoria guardada y añadida al calendario", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.toastVictoriaCalendario), Toast.LENGTH_SHORT).show()
     }
 
     // Función para capturar la vista de la actividad

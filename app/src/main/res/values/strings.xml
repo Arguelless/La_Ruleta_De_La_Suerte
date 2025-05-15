@@ -98,4 +98,8 @@
     <string name="errorInicioSesion">Error al iniciar sesión</string>
     <string name="welcome">Bienvenido</string>
     <string name="falloAutentication">Falló la autenticación</string>
+    <string name="welcomeEnfasis">¡Bienvenido!</string>
+    <string name="entrarButton">Entrar</string>
+    <string name="result">Resultado:</string>
+    <string name="btnTopGlobal">Top global</string>
 </resources>
