@@ -15,6 +15,9 @@ import androidx.appcompat.widget.SwitchCompat
 import com.example.la_ruleta_de_la_suerte.R
 import com.example.la_ruleta_de_la_suerte.data.local.db.App
 import com.example.la_ruleta_de_la_suerte.ui.main.services.MusicService
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -31,6 +34,7 @@ class AjustesActivity : AppCompatActivity() {
     private lateinit var idiomaBtn: Button
     private lateinit var audioManager: AudioManager
     private lateinit var notificationManager: NotificationManager
+    private lateinit var logoutButton: Button
 
     private val disposables = CompositeDisposable()
 
@@ -66,6 +70,7 @@ class AjustesActivity : AppCompatActivity() {
         setContentView(R.layout.ajustes)
 
         // Inicializar componentes
+        logoutButton = findViewById(R.id.logOutButton)
         sonidoSwitch = findViewById(R.id.sonidoSwitch2)
         musicaSwitch = findViewById(R.id.musicaSwitch)
         cambiarCancionBtn = findViewById(R.id.selecMusica)
@@ -119,6 +124,25 @@ class AjustesActivity : AppCompatActivity() {
             selectAudioLauncher.launch("audio/*")
         }
 
+        logoutButton.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+
+            // 2. Cerrar sesión de la cuenta de Google
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("TU_CLIENT_ID_WEB")  // O usa getString(R.string.default_web_client_id)
+                .requestEmail()
+                .build()
+
+            val googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+            googleSignInClient.signOut().addOnCompleteListener {
+                // Aquí puedes ir a la pantalla de login
+                val intent = Intent(this, BienvenidaActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
+        }
         resetMonedas.setOnClickListener {
             val disp = jugadorDao.actualizarMonedas(1000)
                 .subscribeOn(Schedulers.io())
